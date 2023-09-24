@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 
 public enum InfrastructureErrorCode implements ErrorCode {
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND),
-    CANNOT_DESERIALIZE_TO_GIVEN_CLASS(HttpStatus.UNPROCESSABLE_ENTITY);
+    CANNOT_DESERIALIZE_TO_GIVEN_CLASS(HttpStatus.UNPROCESSABLE_ENTITY),
+    TABLENAME_ANNOTATION_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR),
+    TABLENAME_ANNOTATION_EMPTY(HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final HttpStatus httpStatus;
 
