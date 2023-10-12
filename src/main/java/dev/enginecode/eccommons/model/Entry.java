@@ -1,28 +1,45 @@
 package dev.enginecode.eccommons.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.util.Objects;
 
-public class Entry<T> {
-    private final String name;
-    private final T value;
-    private final String type;
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "type",
+        visible = true
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = StringEntry.class, name = "string"),
+        @JsonSubTypes.Type(value = StringEntry.class, name = "enum"),
+        @JsonSubTypes.Type(value = StringArrayEntry.class, name = "string_array"),
+        @JsonSubTypes.Type(value = StringArrayEntry.class, name = "enum_array")
+})
+public abstract class Entry<T> {
+    private String key;
+    private T value;
+    private String type;
 
-    Entry(String name, T value, String type) {
-        this.name = name;
+    public Entry() {}
+
+    public Entry(String key, T value, String type) {
+        this.key = key;
         this.value = value;
         this.type = type;
     }
 
-    public static <T> Entry<?> of(String name, T value, String type) {
+    public static <T> Entry<?> of(String key, T value, String type) {
         return switch (type.toLowerCase().trim()) {
-            case "enum", "string" -> new StringEntry(name, (String) value, type);
-            case "string_array" -> new StringArrayEntry(name, (String[]) value, type);
+            case "enum", "string" -> new StringEntry(key, (String) value, type);
+            case "enum_array", "string_array" -> new StringArrayEntry(key, (String[]) value, type);
             default -> throw new RuntimeException();
         };
     }
 
-    public String getName() {
-        return name;
+    public String getKey() {
+        return key;
     }
 
     public T getValue() {
@@ -33,27 +50,28 @@ public class Entry<T> {
         return type;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Entry<?> entry = (Entry<?>) o;
-        return Objects.equals(name, entry.name) && Objects.equals(value, entry.value) && Objects.equals(type, entry.type);
+        return Objects.equals(key, entry.key) && Objects.equals(value, entry.value) && Objects.equals(type, entry.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, value, type);
-    }
-}
-
-class StringEntry extends Entry<String> {
-    StringEntry(String name, String value, String type) {
-        super(name, value, type);
-    }
-}
-class StringArrayEntry extends Entry<String[]> {
-    StringArrayEntry(String name, String[] value, String type) {
-        super(name, value, type);
+        return Objects.hash(key, value, type);
     }
 }
