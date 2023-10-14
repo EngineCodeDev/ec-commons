@@ -45,9 +45,14 @@ public class JsonMappingRepository<ID extends Serializable> implements JsonRepos
             );
         }
 
+        return deserializeJson(data, clazz);
+    }
+
+    public <R> R deserializeJson(String data, Class<R> clazz) {
         try {
             return objectMapper.readValue(data, clazz);
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
             throw new JsonNotDeserializedException(e.getMessage(), CANNOT_DESERIALIZE_TO_GIVEN_CLASS);
         }
     }

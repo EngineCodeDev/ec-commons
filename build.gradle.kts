@@ -5,6 +5,7 @@ plugins {
     id("org.springframework.boot") version "3.1.3"
     id("io.spring.dependency-management") version "1.1.3"
     id("maven-publish")
+    id("groovy")
 }
 
 group = "dev.enginecode"
@@ -33,6 +34,8 @@ dependencies {
 
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.spockframework:spock-core:2.4-M1-groovy-4.0")
+    testImplementation("org.spockframework:spock-spring:2.4-M1-groovy-4.0")
 }
 
 tasks.withType<Test> {
