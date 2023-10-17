@@ -9,6 +9,7 @@ import java.util.Objects;
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXISTING_PROPERTY,
         property = "type",
+        defaultImpl = StringEntry.class,
         visible = true
 )
 @JsonSubTypes({
@@ -35,6 +36,9 @@ public abstract class Entry<T> {
     }
 
     public static <T> Entry<?> of(String key, T value, String type, String info) {
+        if (type == null) {
+            type = "string";
+        }
         return switch (type.toLowerCase().trim()) {
             case "enum_key", "string" -> new StringEntry(key, (String) value, type, info);
             case "enum" -> new EnumEntry(key, (StringEntry) value, type, info);
@@ -80,21 +84,12 @@ public abstract class Entry<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Entry<?> entry = (Entry<?>) o;
-
-        if (!Objects.equals(key, entry.key)) return false;
-        if (!Objects.equals(value, entry.value)) return false;
-        if (!Objects.equals(type, entry.type)) return false;
-        return Objects.equals(info, entry.info);
+        return Objects.equals(key, entry.key) && Objects.equals(value, entry.value) && Objects.equals(type, entry.type) && Objects.equals(info, entry.info);
     }
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (info != null ? info.hashCode() : 0);
-        return result;
+        return Objects.hash(key, value, type, info);
     }
 }

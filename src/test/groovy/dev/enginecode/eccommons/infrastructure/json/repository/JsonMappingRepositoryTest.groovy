@@ -144,8 +144,7 @@ class JsonMappingRepositoryTest extends Specification {
                         "key": "entry_key1",
                         "value": {
                             "key": "sub_key1",
-                            "value": "sub_value1",
-                            "type": "string"
+                            "value": "sub_value1"
                         },
                         "type": "enum"
                     },
@@ -164,8 +163,7 @@ class JsonMappingRepositoryTest extends Specification {
                         "key": "entry_key3",
                         "value": {
                             "key": "sub_key3",
-                            "value": "sub_value3",
-                            "type": "string"
+                            "value": "sub_value3"
                         },
                         "type": "enum"
                     },
@@ -185,13 +183,11 @@ class JsonMappingRepositoryTest extends Specification {
                         "value": [
                             {
                                 "key": "sub_key51",
-                                "value": "sub_value51",
-                                "type": "string"
+                                "value": "sub_value51"
                             },
                             {
                                 "key": "sub_key52",
-                                "value": "sub_value52",
-                                "type": "string"
+                                "value": "sub_value52"
                             },
                             {
                                 "key": "sub_key53",

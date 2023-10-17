@@ -17,9 +17,10 @@ class EntryTest extends Specification {
         entry.getValue() instanceof String
 
         where:
-        type     | _
-        "String" | _
-        "enum_key "  | _
+        type        | _
+        "String"    | _
+        "enum_key " | _
+        null        | _
     }
 
     def "should create Entry with value of type string_array"() {
