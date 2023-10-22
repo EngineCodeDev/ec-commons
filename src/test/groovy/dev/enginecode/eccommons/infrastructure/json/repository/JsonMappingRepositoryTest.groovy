@@ -6,6 +6,7 @@ import dev.enginecode.eccommons.model.EnumEntry
 import dev.enginecode.eccommons.model.StringArrayEntry
 import dev.enginecode.eccommons.model.StringEntry
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.sql.DataSource
 
@@ -13,14 +14,14 @@ class JsonMappingRepositoryTest extends Specification {
     private DataSource dataSource = Mock(DataSource.class)
     private final def jsonMappingRepository = new JsonMappingRepository(dataSource)
 
-    private static final def GIVEN_OBJECT_JSON = """
+    private static final def  OBJECT_JSON = """
         {
             "id": "e0743e28-448c-47d7-8617-7e083d430448",
             "name": "Audi"
         }
     """
 
-    private static final def GIVEN_STRING_ENTRY_JSON = """
+    private static final def  STRING_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": "entry_value",
@@ -28,7 +29,7 @@ class JsonMappingRepositoryTest extends Specification {
         }
     """
 
-    private static final def GIVEN_ENUM_KEY_ENTRY_JSON = """
+    private static final def  ENUM_KEY_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": "entry_value",
@@ -36,7 +37,7 @@ class JsonMappingRepositoryTest extends Specification {
         }
     """
 
-    private static final def GIVEN_ENUM_ENTRY_JSON = """
+    private static final def  ENUM_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": {
@@ -48,7 +49,7 @@ class JsonMappingRepositoryTest extends Specification {
         }
     """
 
-    private static final def GIVEN_STRING_ARRAY_ENTRY_JSON = """
+    private static final def  STRING_ARRAY_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": [
@@ -60,7 +61,7 @@ class JsonMappingRepositoryTest extends Specification {
         }
     """
 
-    private static final def GIVEN_ENUM_KEY_ARRAY_ENTRY_JSON = """
+    private static final def  ENUM_KEY_ARRAY_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": [
@@ -72,7 +73,7 @@ class JsonMappingRepositoryTest extends Specification {
         }
     """
 
-    private static final def GIVEN_ARRAY_OF_ENTRIES_JSON = """
+    private static final def  ARRAY_OF_ENTRIES_JSON = """
         [
             {
                 "key": "entry_key1",
@@ -102,7 +103,7 @@ class JsonMappingRepositoryTest extends Specification {
         ]
     """
 
-    private static final def GIVEN_ENTRIES_WRAPPER_JSON = """
+    private static final def  ENTRIES_WRAPPER_JSON = """
         {
             "id": "e0743e28-448c-47d7-8617-7e083d430448",
             "entries": [
@@ -135,7 +136,7 @@ class JsonMappingRepositoryTest extends Specification {
         }
     """
 
-    private static final def GIVEN_ENUM_ENTRIES_WRAPPER_JSON = """
+    private static final def  ENUM_ENTRIES_MAP_WRAPPER_JSON = """
         {
             "id": "e0743e28-448c-47d7-8617-7e083d430448",
             "items": {
@@ -202,7 +203,27 @@ class JsonMappingRepositoryTest extends Specification {
         }
     """
 
+    private static final def  NESTED_ENUM_ENTRIES_JSON = """
+        {
+            "key": "entry_key",
+            "value": {
+                "key": "key-1",
+                "value": {
+                    "key": "key-2",
+                    "value": {
+                        "key": "key-3",
+                        "value": "value-3",
+                        "type": "string"
+                    },
+                    "type": "enum"
+                },
+                "type": "enum"
+            },
+            "type": "enum"
+        }
+    """
 
+    @Unroll("#description")
     def "should deserialize json to an object of the given class"() {
         when:
         def deserializedObject = jsonMappingRepository.deserializeJson(jsonData, clazz)
@@ -211,18 +232,19 @@ class JsonMappingRepositoryTest extends Specification {
         deserializedObject.class == clazz
 
         where:
-        clazz                         | jsonData
-        Car.class                     | GIVEN_OBJECT_JSON
-        StringEntry.class             | GIVEN_STRING_ENTRY_JSON
-        StringEntry.class             | GIVEN_ENUM_KEY_ENTRY_JSON
-        EnumEntry.class               | GIVEN_ENUM_ENTRY_JSON
-        StringArrayEntry.class        | GIVEN_STRING_ARRAY_ENTRY_JSON
-        StringArrayEntry.class        | GIVEN_ENUM_KEY_ARRAY_ENTRY_JSON
-        LinkedList<Entry<?>>.class    | GIVEN_ARRAY_OF_ENTRIES_JSON
-        HashSet<Entry<?>>.class       | GIVEN_ARRAY_OF_ENTRIES_JSON
-        LinkedHashSet<Entry<?>>.class | GIVEN_ARRAY_OF_ENTRIES_JSON
-        EntriesWrapper.class          | GIVEN_ENTRIES_WRAPPER_JSON
-        EnumEntriesMapWrapper.class   | GIVEN_ENUM_ENTRIES_WRAPPER_JSON
+        description                          | clazz                         | jsonData
+        "object as Car class"                | Car.class                     |  OBJECT_JSON
+        "string entry as StringEntry"        | StringEntry.class             |  STRING_ENTRY_JSON
+        "enum_key entry as StringEntry"      | StringEntry.class             |  ENUM_KEY_ENTRY_JSON
+        "enum entry as EnumEntry"            | EnumEntry.class               |  ENUM_ENTRY_JSON
+        "string_array as StringArrayEntry"   | StringArrayEntry.class        |  STRING_ARRAY_ENTRY_JSON
+        "enum_key_array as StringArrayEntry" | StringArrayEntry.class        |  ENUM_KEY_ARRAY_ENTRY_JSON
+        "Entry<?> array as LinkedList"       | LinkedList<Entry<?>>.class    |  ARRAY_OF_ENTRIES_JSON
+        "Entry<?> array as HashSet"          | HashSet<Entry<?>>.class       |  ARRAY_OF_ENTRIES_JSON
+        "Entry<?> array as LinkedHashSet"    | LinkedHashSet<Entry<?>>.class |  ARRAY_OF_ENTRIES_JSON
+        "object as EntriesWrapper"           | EntriesWrapper.class          |  ENTRIES_WRAPPER_JSON
+        "object as EnumEntriesMapWrapper"    | EnumEntriesMapWrapper.class   |  ENUM_ENTRIES_MAP_WRAPPER_JSON
+        "nested enum entries as EnumEntry"   | EnumEntry.class               |  NESTED_ENUM_ENTRIES_JSON
     }
 
 
@@ -239,6 +261,11 @@ class Car implements TableAnnotatedRecord {
     String getName() {
         return name
     }
+
+    @Override
+    String toString() {
+        return "Car{" + "id=" + id + ", name='" + name + '\'' + '}'
+    }
 }
 
 class EntriesWrapper implements TableAnnotatedRecord {
@@ -252,6 +279,11 @@ class EntriesWrapper implements TableAnnotatedRecord {
     LinkedHashSet<Entry<?>> getEntries() {
         return entries
     }
+
+    @Override
+    String toString() {
+        return "EntriesWrapper{" + "id=" + id + ", entries=" + entries + '}'
+    }
 }
 
 class EnumEntriesMapWrapper implements TableAnnotatedRecord {
@@ -264,5 +296,10 @@ class EnumEntriesMapWrapper implements TableAnnotatedRecord {
 
     LinkedHashMap<String, LinkedHashSet<Entry<?>>> getItems() {
         return items
+    }
+
+    @Override
+    String toString() {
+        return "EnumEntriesMapWrapper{" + "id=" + id + ", items=" + items + '}'
     }
 }
