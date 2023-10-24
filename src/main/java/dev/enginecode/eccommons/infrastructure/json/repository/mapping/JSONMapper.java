@@ -2,6 +2,9 @@ package dev.enginecode.eccommons.infrastructure.json.repository.mapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.enginecode.eccommons.exception.JsonNotDeserializedException;
+
+import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.CANNOT_DESERIALIZE_TO_GIVEN_CLASS;
 
 public class JSONMapper implements Mapping {
     private final ObjectMapper mapper = new ObjectMapper();
@@ -11,7 +14,7 @@ public class JSONMapper implements Mapping {
         try {
             return mapper.readValue(data, clazz);
         } catch (JsonProcessingException exc) {
-            throw new RuntimeException(exc.getMessage());
+            throw new JsonNotDeserializedException(exc.getMessage(), CANNOT_DESERIALIZE_TO_GIVEN_CLASS);
         }
     }
 }
