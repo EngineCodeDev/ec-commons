@@ -11,9 +11,8 @@ public class StringArrayEntry extends Entry<String[]> {
     @Override
     public String toString() {
         String value = Arrays.toString(super.getValue());
-        return this.getClass().getSimpleName() +
-                "{'key='" + super.getKey() + "'" +
-                ", value=" + value +
-                ", info='" + super.getInfo() + "'}";
+        return String.format(
+                "%s{'key='%s', value='%s', info='%s'}", this.getClass().getSimpleName(), getKey(), value, getInfo()
+        );
     }
 }
