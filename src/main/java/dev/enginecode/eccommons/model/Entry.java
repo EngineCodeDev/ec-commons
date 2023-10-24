@@ -95,6 +95,6 @@ public abstract class Entry<T> {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{'key='" + key + "'" + ", value=" + value + ", info='" + info + "'}";
+        return String.format("%s{'key='%s', value='%s', info='%s'}", this.getClass().getSimpleName(), key, value, info);
     }
 }
