@@ -92,4 +92,9 @@ public abstract class Entry<T> {
     public int hashCode() {
         return Objects.hash(key, value, type, info);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s{'key='%s', value='%s', info='%s'}", this.getClass().getSimpleName(), key, value, info);
+    }
 }
