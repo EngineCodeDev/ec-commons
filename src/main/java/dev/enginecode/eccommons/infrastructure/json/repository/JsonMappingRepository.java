@@ -1,13 +1,12 @@
 package dev.enginecode.eccommons.infrastructure.json.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.sql.SQLQueryFactory;
-import dev.enginecode.eccommons.exception.ResourceNotFoundException;
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
 import dev.enginecode.eccommons.infrastructure.json.model.TableName;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.DatabaseConnection;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.PostgresDatabaseConnection;
+import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JSONMapper;
+import dev.enginecode.eccommons.infrastructure.json.repository.mapping.Mapping;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -16,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 public class JsonMappingRepository<ID extends Serializable> implements JsonRepository<ID> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Mapping mapper = new JSONMapper();
     private final DatabaseConnection databaseConnection;
 
     JsonMappingRepository(DataSource dataSource) {
@@ -27,7 +26,7 @@ public class JsonMappingRepository<ID extends Serializable> implements JsonRepos
     public <R extends TableAnnotatedRecord> R findById(ID id, Class<R> clazz) {
         String tableName = getTableName(clazz);
         String data = getDataById(id, tableName, clazz);
-        return deserializeJson(data, clazz);
+        return mapper.deserialize(data, clazz);
     }
 
     private <R extends TableAnnotatedRecord> String getTableName(Class<R> clazz) {
@@ -47,13 +46,5 @@ public class JsonMappingRepository<ID extends Serializable> implements JsonRepos
                 .where(record.id.eq(id))
                 .fetchOne()
         ).orElseThrow(() -> new RuntimeException(id.toString()));
-    }
-
-    public <R> R deserializeJson(String data, Class<R> clazz) {
-        try {
-            return objectMapper.readValue(data, clazz);
-        } catch (JsonProcessingException exc) {
-            throw new RuntimeException(exc.getMessage());
-        }
     }
 }

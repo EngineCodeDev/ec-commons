@@ -1,19 +1,23 @@
 package dev.enginecode.eccommons.infrastructure.json.repository
 
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord
+import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JSONMapper
 import dev.enginecode.eccommons.model.Entry
 import spock.lang.Specification
 
-abstract class AbstractJsonMappingRepositoryTest extends Specification {
+import javax.sql.DataSource
 
-    static final def  OBJECT_JSON = """
+abstract class JsonMapperDataTest extends Specification {
+    public JSONMapper jsonMapper
+
+    static final def OBJECT_JSON = """
         {
             "id": "e0743e28-448c-47d7-8617-7e083d430448",
             "name": "Audi"
         }
     """
 
-    static final def  STRING_ENTRY_JSON = """
+    static final def STRING_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": "entry_value",
@@ -21,7 +25,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         }
     """
 
-    static final def  ENUM_KEY_ENTRY_JSON = """
+    static final def ENUM_KEY_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": "entry_value",
@@ -29,7 +33,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         }
     """
 
-    static final def  ENUM_ENTRY_JSON = """
+    static final def ENUM_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": {
@@ -41,7 +45,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         }
     """
 
-    static final def  STRING_ARRAY_ENTRY_JSON = """
+    static final def STRING_ARRAY_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": [
@@ -53,7 +57,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         }
     """
 
-    static final def  ENUM_KEY_ARRAY_ENTRY_JSON = """
+    static final def ENUM_KEY_ARRAY_ENTRY_JSON = """
         {
             "key": "entry_key",
             "value": [
@@ -65,7 +69,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         }
     """
 
-    static final def  ARRAY_OF_ENTRIES_JSON = """
+    static final def ARRAY_OF_ENTRIES_JSON = """
         [
             {
                 "key": "entry_key1",
@@ -95,7 +99,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         ]
     """
 
-    static final def  ENTRIES_WRAPPER_JSON = """
+    static final def ENTRIES_WRAPPER_JSON = """
         {
             "id": "e0743e28-448c-47d7-8617-7e083d430448",
             "entries": [
@@ -128,7 +132,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         }
     """
 
-    static final def  ENUM_ENTRIES_MAP_WRAPPER_JSON = """
+    static final def ENUM_ENTRIES_MAP_WRAPPER_JSON = """
         {
             "id": "e0743e28-448c-47d7-8617-7e083d430448",
             "items": {
@@ -195,7 +199,7 @@ abstract class AbstractJsonMappingRepositoryTest extends Specification {
         }
     """
 
-    static final def  NESTED_ENUM_ENTRIES_JSON = """
+    static final def NESTED_ENUM_ENTRIES_JSON = """
         {
             "key": "entry_key",
             "value": {
