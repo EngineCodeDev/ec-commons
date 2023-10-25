@@ -6,11 +6,11 @@ import dev.enginecode.eccommons.exception.JsonNotDeserializedException;
 
 import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.CANNOT_DESERIALIZE_TO_GIVEN_CLASS;
 
-public class JSONMapper implements Mapping {
+public class JsonMapper implements ObjectMapping {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public <R> R deserialize(String data, Class<R> clazz) {
+    public <R> R read(String data, Class<R> clazz) {
         try {
             return mapper.readValue(data, clazz);
         } catch (JsonProcessingException exc) {

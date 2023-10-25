@@ -1,6 +1,6 @@
 package dev.enginecode.eccommons.infrastructure.json.repository
 
-import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JSONMapper
+import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMapper
 import dev.enginecode.eccommons.model.Entry
 import dev.enginecode.eccommons.model.EnumEntry
 import dev.enginecode.eccommons.model.StringArrayEntry
@@ -9,13 +9,13 @@ import spock.lang.Unroll
 
 class JsonMapperTest extends JsonMapperDataTest {
     def setup() {
-        jsonMapper = new JSONMapper()
+        jsonMapper = new JsonMapper()
     }
 
     @Unroll("#description")
     def "should deserialize json to an object of the given class"() {
         when:
-        def deserializedObject = jsonMapper.deserialize(jsonData, clazz)
+        def deserializedObject = jsonMapper.read(jsonData, clazz)
 
         then:
         deserializedObject.class == clazz

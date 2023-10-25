@@ -16,7 +16,7 @@ public class PostgresDatabaseConnection implements DatabaseConnection {
         this.queryFactory = new SQLQueryFactory(configuration, dataSource);
     }
 
-    public SQLQueryFactory get() {
+    public SQLQueryFactory getQueryFactory() {
         return queryFactory;
     }
 }

@@ -1,14 +1,13 @@
 package dev.enginecode.eccommons.infrastructure.json.repository;
 
-import com.querydsl.sql.SQLQueryFactory;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
 import dev.enginecode.eccommons.exception.TableNotFoundException;
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
 import dev.enginecode.eccommons.infrastructure.json.model.TableName;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.DatabaseConnection;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.PostgresDatabaseConnection;
-import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JSONMapper;
-import dev.enginecode.eccommons.infrastructure.json.repository.mapping.Mapping;
+import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMapper;
+import dev.enginecode.eccommons.infrastructure.json.repository.mapping.ObjectMapping;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -20,7 +19,7 @@ import static dev.enginecode.eccommons.infrastructure.json.errors.Infrastructure
 
 @Repository
 public class JsonMappingRepository<ID extends Serializable> implements JsonRepository<ID> {
-    private final Mapping mapper = new JSONMapper();
+    private final ObjectMapping mapper = new JsonMapper();
     private final DatabaseConnection databaseConnection;
 
     JsonMappingRepository(DataSource dataSource) {
@@ -31,7 +30,7 @@ public class JsonMappingRepository<ID extends Serializable> implements JsonRepos
     public <R extends TableAnnotatedRecord> R findById(ID id, Class<R> clazz) {
         String tableName = getTableName(clazz);
         String data = getDataById(id, tableName, clazz);
-        return mapper.deserialize(data, clazz);
+        return mapper.read(data, clazz);
     }
 
     private <R extends TableAnnotatedRecord> String getTableName(Class<R> clazz) {
@@ -46,7 +45,7 @@ public class JsonMappingRepository<ID extends Serializable> implements JsonRepos
             throw new ResourceNotFoundException("Resource with id: '" + id + "' not found!", RESOURCE_NOT_FOUND);
         }
         QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
-        return Optional.ofNullable(((SQLQueryFactory) databaseConnection.get())
+        return Optional.ofNullable(databaseConnection.getQueryFactory()
                 .select(record.data)
                 .from(record)
                 .where(record.id.eq(id))

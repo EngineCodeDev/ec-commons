@@ -1,14 +1,12 @@
 package dev.enginecode.eccommons.infrastructure.json.repository
 
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord
-import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JSONMapper
+import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMapper
 import dev.enginecode.eccommons.model.Entry
 import spock.lang.Specification
 
-import javax.sql.DataSource
-
 abstract class JsonMapperDataTest extends Specification {
-    public JSONMapper jsonMapper
+    public JsonMapper jsonMapper
 
     static final def OBJECT_JSON = """
         {
