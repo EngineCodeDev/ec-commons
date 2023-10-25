@@ -18,11 +18,11 @@ import static dev.enginecode.eccommons.infrastructure.json.errors.Infrastructure
 import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.TABLENAME_ANNOTATION_EMPTY;
 
 @Repository
-public class JsonMappingRepository<ID extends Serializable> implements JsonRepository<ID> {
+public class JsonPostgresRepository<ID extends Serializable> implements JsonRepository<ID> {
     private final ObjectMapping mapper = new JsonMapper();
     private final DatabaseConnection databaseConnection;
 
-    JsonMappingRepository(DataSource dataSource) {
+    JsonPostgresRepository(DataSource dataSource) {
         databaseConnection = new PostgresDatabaseConnection(dataSource);
     }
 
