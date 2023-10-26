@@ -7,7 +7,7 @@ import dev.enginecode.eccommons.model.StringArrayEntry
 import dev.enginecode.eccommons.model.StringEntry
 import spock.lang.Unroll
 
-class JsonMapperTest extends JsonMapperDataTest {
+class JsonMapperTest extends JsonMapperTestData {
     def setup() {
         jsonMapper = new JsonMapper()
     }

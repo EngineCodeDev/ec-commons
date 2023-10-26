@@ -5,7 +5,7 @@ import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMappe
 import dev.enginecode.eccommons.model.Entry
 import spock.lang.Specification
 
-abstract class JsonMapperDataTest extends Specification {
+abstract class JsonMapperTestData extends Specification {
     public JsonMapper jsonMapper
 
     static final def OBJECT_JSON = """
