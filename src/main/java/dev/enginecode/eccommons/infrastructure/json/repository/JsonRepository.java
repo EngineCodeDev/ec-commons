@@ -7,12 +7,13 @@ import jakarta.persistence.Id;
 import java.io.Serializable;
 
 public interface JsonRepository<ID extends Serializable> {
-    <R extends TableAnnotatedRecord> R findById(ID id, Class<R> clazz);
+    <R extends TableAnnotatedRecord<ID>> R findById(ID id, Class<R> clazz);
+    <R extends TableAnnotatedRecord<ID>> void save(R object, Class<R> clazz);
 
     @Entity
-    class DataRecord<ID extends Serializable> {
-        @Id
-        private ID id;
-        private String data;
+    record DataRecord<ID extends Serializable>(@Id ID id, String data) {
+        public DataRecord() {
+            this(null, null);
+        }
     }
 }

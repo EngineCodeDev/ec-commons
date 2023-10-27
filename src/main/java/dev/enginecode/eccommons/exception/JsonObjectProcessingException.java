@@ -1,9 +1,9 @@
 package dev.enginecode.eccommons.exception;
 
-public class JsonNotDeserializedException extends RuntimeException {
+public class JsonObjectProcessingException extends RuntimeException {
     private final ErrorCode code;
 
-    public JsonNotDeserializedException(String message, ErrorCode code) {
+    public JsonObjectProcessingException(String message, ErrorCode code) {
         super(message);
         this.code = code;
     }
