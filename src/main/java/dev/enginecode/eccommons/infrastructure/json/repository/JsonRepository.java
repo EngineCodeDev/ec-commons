@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface JsonRepository<ID extends Serializable> {
     <R extends TableAnnotatedRecord<ID>> R findById(ID id, Class<R> clazz);
+    <R extends TableAnnotatedRecord<ID>> List<R> findAll(Class<R> clazz);
     <R extends TableAnnotatedRecord<ID>> void save(R object, Class<R> clazz);
 
     @Entity

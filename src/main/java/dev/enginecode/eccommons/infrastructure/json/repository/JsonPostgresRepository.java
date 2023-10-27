@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.io.Serializable;
+import java.util.List;
 
 @Repository
 public class JsonPostgresRepository<ID extends Serializable> extends DataRecordAbstractPostgresRepository<ID> {
@@ -20,6 +21,14 @@ public class JsonPostgresRepository<ID extends Serializable> extends DataRecordA
     public <R extends TableAnnotatedRecord<ID>> R findById(ID id, Class<R> clazz) {
         String dataRecord = getDataRecordById(id, clazz);
         return mapper.read(dataRecord, clazz);
+    }
+
+    @Override
+    public <R extends TableAnnotatedRecord<ID>> List<R> findAll(Class<R> clazz) {
+        List<String> dataRecordsList = getAllDataRecords(clazz);
+        return dataRecordsList.stream()
+                .map(dataRecord -> mapper.read(dataRecord, clazz))
+                .toList();
     }
 
     @Override

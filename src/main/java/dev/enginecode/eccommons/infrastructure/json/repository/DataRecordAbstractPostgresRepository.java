@@ -13,6 +13,7 @@ import org.postgresql.util.PGobject;
 import javax.sql.DataSource;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.*;
@@ -39,6 +40,15 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         ));
     }
 
+    <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) {
+        String tableName = getTableName(clazz);
+        QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
+        return databaseConnection.getQueryFactory()
+                .select(record.data)
+                .from(record)
+                .fetch();
+    }
+
     <R extends TableAnnotatedRecord<ID>> void saveDataRecord(JsonRepository.DataRecord<ID> dataRecord, Class<R> clazz) {
         String tableName = getTableName(clazz);
         RelationalPathBase<?> record = new RelationalPathBase<>(QJsonRepository_DataRecord.class, "", null, tableName);
@@ -49,6 +59,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                 .values(dataRecord.id(), pgJsonb)
                 .execute();
     }
+
 
     private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) {
         try {
