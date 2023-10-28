@@ -1,4 +1,5 @@
 package dev.enginecode.eccommons.infrastructure.json.model;
 
-public interface TableAnnotatedRecord {
+public interface TableAnnotatedRecord<ID> {
+    ID id();
 }

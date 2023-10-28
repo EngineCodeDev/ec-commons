@@ -1,6 +1,6 @@
 package dev.enginecode.eccommons.handler;
 
-import dev.enginecode.eccommons.exception.JsonNotDeserializedException;
+import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
 import dev.enginecode.eccommons.exception.TableNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -27,8 +27,8 @@ public class ApplicationExceptionHandler {
                 .body(new ErrorResponse(e.getMessage()));
     }
 
-    @ExceptionHandler(JsonNotDeserializedException.class)
-    public ResponseEntity<ErrorResponse> handle(JsonNotDeserializedException e) {
+    @ExceptionHandler(JsonObjectProcessingException.class)
+    public ResponseEntity<ErrorResponse> handle(JsonObjectProcessingException e) {
         return ResponseEntity
                 .status(e.getCode().getHttpStatus())
                 .body(new ErrorResponse(e.getCode().toString(), e.getMessage()));

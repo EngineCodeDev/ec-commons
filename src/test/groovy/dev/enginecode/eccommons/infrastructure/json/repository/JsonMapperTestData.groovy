@@ -219,54 +219,22 @@ abstract class JsonMapperTestData extends Specification {
 }
 
 
-class Car implements TableAnnotatedRecord {
-    private UUID id
-    private String name
-
-    UUID getId() {
-        return id
-    }
-
-    String getName() {
-        return name
-    }
-
+record Car(UUID id, String name) implements TableAnnotatedRecord<UUID> {
     @Override
     String toString() {
         return "Car{" + "id=" + id + ", name='" + name + '\'' + '}'
     }
 }
 
-class EntriesWrapper implements TableAnnotatedRecord {
-    private UUID id
-    private LinkedHashSet<Entry<?>> entries
-
-    UUID getId() {
-        return id
-    }
-
-    LinkedHashSet<Entry<?>> getEntries() {
-        return entries
-    }
-
+record EntriesWrapper(UUID id, LinkedHashSet<Entry<?>> entries) implements TableAnnotatedRecord<UUID> {
     @Override
     String toString() {
         return "EntriesWrapper{" + "id=" + id + ", entries=" + entries + '}'
     }
 }
 
-class EnumEntriesMapWrapper implements TableAnnotatedRecord {
-    private UUID id
-    private LinkedHashMap<String, LinkedHashSet<Entry<?>>> items
-
-    UUID getId() {
-        return id
-    }
-
-    LinkedHashMap<String, LinkedHashSet<Entry<?>>> getItems() {
-        return items
-    }
-
+record EnumEntriesMapWrapper(UUID id, LinkedHashMap<String, LinkedHashSet<Entry<?>>> items)
+        implements TableAnnotatedRecord<UUID> {
     @Override
     String toString() {
         return "EnumEntriesMapWrapper{" + "id=" + id + ", items=" + items + '}'
