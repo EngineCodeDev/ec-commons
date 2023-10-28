@@ -2,7 +2,7 @@ package dev.enginecode.eccommons.infrastructure.json.repository
 
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord
 import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMapper
-import dev.enginecode.eccommons.model.Entry
+import dev.enginecode.eccommons.jsonschema.model.Entry
 import spock.lang.Specification
 
 abstract class JsonMapperTestData extends Specification {

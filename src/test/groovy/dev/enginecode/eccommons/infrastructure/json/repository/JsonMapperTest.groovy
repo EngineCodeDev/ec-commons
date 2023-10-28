@@ -1,10 +1,11 @@
 package dev.enginecode.eccommons.infrastructure.json.repository
 
 import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMapper
-import dev.enginecode.eccommons.model.Entry
-import dev.enginecode.eccommons.model.EnumEntry
-import dev.enginecode.eccommons.model.StringArrayEntry
-import dev.enginecode.eccommons.model.StringEntry
+import dev.enginecode.eccommons.jsonschema.model.Entry
+import dev.enginecode.eccommons.jsonschema.model.EnumEntry
+import dev.enginecode.eccommons.jsonschema.model.JsonSchema
+import dev.enginecode.eccommons.jsonschema.model.StringArrayEntry
+import dev.enginecode.eccommons.jsonschema.model.StringEntry
 import spock.lang.Unroll
 
 class JsonMapperTest extends JsonMapperTestData {

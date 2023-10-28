@@ -1,4 +1,4 @@
-package dev.enginecode.eccommons.model;
+package dev.enginecode.eccommons.jsonschema.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonSubTypes;

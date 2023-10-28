@@ -1,5 +1,7 @@
 package dev.enginecode.eccommons.model
 
+import dev.enginecode.eccommons.jsonschema.model.Entry
+import dev.enginecode.eccommons.jsonschema.model.StringEntry
 import spock.lang.Specification
 
 class EntryTest extends Specification {
