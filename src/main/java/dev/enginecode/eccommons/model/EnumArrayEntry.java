@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class EnumArrayEntry extends Entry<Entry<String>[]> {
     public EnumArrayEntry() {}
-    public EnumArrayEntry(String key, StringEntry[] value, String type, String info) {
+    public EnumArrayEntry(String key, StringEntry[] value, Type type, String info) {
         super(key, value, type, info);
     }
 

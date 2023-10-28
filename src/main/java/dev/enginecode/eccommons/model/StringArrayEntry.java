@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class StringArrayEntry extends Entry<String[]> {
     public StringArrayEntry() {}
-    public StringArrayEntry(String key, String[] value, String type, String info) {
+    public StringArrayEntry(String key, String[] value, Type type, String info) {
         super(key, value, type, info);
     }
 
