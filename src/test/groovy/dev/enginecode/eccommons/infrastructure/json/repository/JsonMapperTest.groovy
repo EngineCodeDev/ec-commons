@@ -1,10 +1,11 @@
 package dev.enginecode.eccommons.infrastructure.json.repository
 
 import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMapper
-import dev.enginecode.eccommons.model.Entry
-import dev.enginecode.eccommons.model.EnumEntry
-import dev.enginecode.eccommons.model.StringArrayEntry
-import dev.enginecode.eccommons.model.StringEntry
+import dev.enginecode.eccommons.jsonschema.model.Entry
+import dev.enginecode.eccommons.jsonschema.model.EnumEntry
+import dev.enginecode.eccommons.jsonschema.model.JsonSchema
+import dev.enginecode.eccommons.jsonschema.model.StringArrayEntry
+import dev.enginecode.eccommons.jsonschema.model.StringEntry
 import spock.lang.Unroll
 
 class JsonMapperTest extends JsonMapperTestData {
@@ -34,6 +35,7 @@ class JsonMapperTest extends JsonMapperTestData {
         "object as EntriesWrapper"           | EntriesWrapper.class          | ENTRIES_WRAPPER_JSON
         "object as EnumEntriesMapWrapper"    | EnumEntriesMapWrapper.class   | ENUM_ENTRIES_MAP_WRAPPER_JSON
         "nested enum entries as EnumEntry"   | EnumEntry.class               | NESTED_ENUM_ENTRIES_JSON
+        "object as JsonSchema"               | JsonSchema.class              | JSON_SCHEMA
     }
 
 

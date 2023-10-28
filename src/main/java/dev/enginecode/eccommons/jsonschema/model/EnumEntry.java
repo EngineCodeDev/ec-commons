@@ -1,4 +1,4 @@
-package dev.enginecode.eccommons.model;
+package dev.enginecode.eccommons.jsonschema.model;
 
 public class EnumEntry extends Entry<Entry<String>> {
 
