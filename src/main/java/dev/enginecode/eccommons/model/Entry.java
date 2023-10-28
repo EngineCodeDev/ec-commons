@@ -1,5 +1,6 @@
 package dev.enginecode.eccommons.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -23,12 +24,12 @@ import java.util.Objects;
 public abstract class Entry<T> {
     private String key;
     private T value;
-    private String type;
+    private Type type;
     private String info;
 
     public Entry() {}
 
-    public Entry(String key, T value, String type, String info) {
+    public Entry(String key, T value, Type type, String info) {
         this.key = key;
         this.value = value;
         this.type = type;
@@ -40,12 +41,29 @@ public abstract class Entry<T> {
             type = "string";
         }
         return switch (type.toLowerCase().trim()) {
-            case "enum_key", "string" -> new StringEntry(key, (String) value, type, info);
-            case "enum" -> new EnumEntry(key, (StringEntry) value, type, info);
-            case "enum_key_array", "string_array" -> new StringArrayEntry(key, (String[]) value, type, info);
-            case "enum_array" -> new EnumArrayEntry(key, (StringEntry[]) value, type, info);
+            case "string" -> new StringEntry(key, (String) value, Type.STRING, info);
+            case "enum_key" -> new StringEntry(key, (String) value, Type.ENUM_KEY, info);
+            case "enum" -> new EnumEntry(key, (StringEntry) value, Type.ENUM, info);
+            case "string_array" -> new StringArrayEntry(key, (String[]) value, Type.STRING_ARRAY, info);
+            case "enum_key_array" -> new StringArrayEntry(key, (String[]) value, Type.ENUM_KEY_ARRAY, info);
+            case "enum_array" -> new EnumArrayEntry(key, (StringEntry[]) value, Type.ENUM_ARRAY, info);
             default -> throw new RuntimeException();
         };
+    }
+
+    enum Type{
+        @JsonAlias("string")
+        STRING,
+        @JsonAlias("enum_key")
+        ENUM_KEY,
+        @JsonAlias("enum")
+        ENUM,
+        @JsonAlias("string_array")
+        STRING_ARRAY,
+        @JsonAlias("enum_key_array")
+        ENUM_KEY_ARRAY,
+        @JsonAlias("enum_array")
+        ENUM_ARRAY
     }
 
     public String getKey() {
@@ -56,7 +74,7 @@ public abstract class Entry<T> {
         return value;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
@@ -72,7 +90,7 @@ public abstract class Entry<T> {
         this.value = value;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -90,7 +108,7 @@ public abstract class Entry<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, value, type, info);
+        return key != null ? key.hashCode() : 0;
     }
 
     @Override

@@ -40,7 +40,7 @@ class EntryTest extends Specification {
     def "should create Entry with value of type enum"() {
         given:
         String key = "Key of entry"
-        StringEntry value = new StringEntry("sub_key", "sub_value", "sub_type", "")
+        StringEntry value = new StringEntry("sub_key", "sub_value", Entry.Type.STRING, "")
         String type = "enum"
         String info = ""
 
@@ -55,10 +55,10 @@ class EntryTest extends Specification {
         given:
         String key = "Key of entry"
         StringEntry[] value = [
-                new StringEntry("sub_key1", "sub_value1", "string", "1"),
-                new StringEntry("sub_key2", "sub_value2", "string", "2"),
-                new StringEntry("sub_key3", "sub_value3", "string", "3"),
-                new StringEntry("sub_key4", "sub_value4", "string", "4")
+                new StringEntry("sub_key1", "sub_value1", Entry.Type.STRING, "1"),
+                new StringEntry("sub_key2", "sub_value2", Entry.Type.STRING, "2"),
+                new StringEntry("sub_key3", "sub_value3", Entry.Type.STRING, "3"),
+                new StringEntry("sub_key4", "sub_value4", Entry.Type.STRING, "4")
         ]
         String type = "enum_array"
         String info = ""
