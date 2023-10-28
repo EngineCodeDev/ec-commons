@@ -1,6 +1,6 @@
 package dev.enginecode.eccommons.jsonschema.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -51,18 +51,18 @@ public abstract class Entry<T> {
         };
     }
 
-    enum Type{
-        @JsonAlias("string")
+    enum Type {
+        @JsonProperty("string")
         STRING,
-        @JsonAlias("enum_key")
+        @JsonProperty("enum_key")
         ENUM_KEY,
-        @JsonAlias("enum")
+        @JsonProperty("enum")
         ENUM,
-        @JsonAlias("string_array")
+        @JsonProperty("string_array")
         STRING_ARRAY,
-        @JsonAlias("enum_key_array")
+        @JsonProperty("enum_key_array")
         ENUM_KEY_ARRAY,
-        @JsonAlias("enum_array")
+        @JsonProperty("enum_array")
         ENUM_ARRAY
     }
 

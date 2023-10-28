@@ -35,6 +35,7 @@ class JsonMapperTest extends JsonMapperTestData {
         "object as EntriesWrapper"           | EntriesWrapper.class          | ENTRIES_WRAPPER_JSON
         "object as EnumEntriesMapWrapper"    | EnumEntriesMapWrapper.class   | ENUM_ENTRIES_MAP_WRAPPER_JSON
         "nested enum entries as EnumEntry"   | EnumEntry.class               | NESTED_ENUM_ENTRIES_JSON
+        "object as JsonSchema"               | JsonSchema.class              | JSON_SCHEMA
     }
 
 
