@@ -68,7 +68,7 @@ publishing {
     repositories {
         mavenLocal()
         maven {
-            name = "EngineCode GitHub Packages"
+            name = "EngineCodeGitHubPackages"
             url = uri("https://maven.pkg.github.com/EngineCodeDev/packages")
             credentials {
                 username = project.findProperty("gpr.user")?.toString() ?: System.getenv("GITHUB_ACTOR")
