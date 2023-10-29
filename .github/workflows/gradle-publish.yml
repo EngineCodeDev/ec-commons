@@ -18,12 +18,12 @@ jobs:
       - name: Print Username and Password
         run: |
           echo "Username: ${{ github.actor }}"
-          echo "Password: ${{ secrets.GITHUB_TOKEN }}"
+          echo "Password: ${{ secrets.TOKEN }}"
       - name: Publish package
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
         with:
           arguments: publish
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
        
