@@ -5,7 +5,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
@@ -15,14 +15,11 @@ jobs:
           distribution: 'temurin'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
-      - name: Print Username and Password
-        run: |
-          echo "Username: ${{ env.GITHUB_ACTOR }}"
-          echo "Password: ${{ secrets.TOKEN }}"
       - name: Publish package
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
         with:
           arguments: publish
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ github.token }}
        
