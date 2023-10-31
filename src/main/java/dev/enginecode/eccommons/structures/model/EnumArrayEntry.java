@@ -1,4 +1,4 @@
-package dev.enginecode.eccommons.jsonschema.model;
+package dev.enginecode.eccommons.structures.model;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package dev.enginecode.eccommons.jsonschema.model;
+package dev.enginecode.eccommons.structures.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -51,7 +51,7 @@ public abstract class Entry<T> {
         };
     }
 
-    enum Type {
+    public enum Type {
         @JsonProperty("string")
         STRING,
         @JsonProperty("enum_key")
