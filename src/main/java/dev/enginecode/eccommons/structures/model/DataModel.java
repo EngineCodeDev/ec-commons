@@ -1,22 +1,22 @@
-package dev.enginecode.eccommons.jsonschema.model;
+package dev.enginecode.eccommons.structures.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
 
-public record JsonSchema(
+public record DataModel(
         UUID id,
-        LinkedHashMap<String, Settings> properties,
-        LinkedHashMap<String, LinkedHashSet<Entry<?>>> options
+        LinkedHashMap<String, EntrySettings> entrySettings,
+        LinkedHashMap<String, LinkedHashSet<String>> groupContents,
+        LinkedHashMap<String, LinkedHashSet<Entry<?>>> enumOptions
 ) {
 
-    public record Settings(
+    public record EntrySettings(
             Entry.Type type,
             Format format,
             String optionsRef,
-            Boolean required,
-            Boolean readOnly,
-            List<Content> contents
+            boolean required,
+            boolean readOnly
     ) {
         public enum Format {
             @JsonProperty("dictionary")
@@ -27,12 +27,6 @@ public record JsonSchema(
             URL,
             @JsonProperty("uuid")
             UUID
-        }
-
-        public record Content(
-                Set<String> groups,
-                Map<String, Settings> attributes
-        ) {
         }
 
     }
