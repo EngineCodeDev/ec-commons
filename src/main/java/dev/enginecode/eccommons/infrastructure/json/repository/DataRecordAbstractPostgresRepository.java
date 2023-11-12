@@ -29,7 +29,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         databaseConnection = new PostgresDatabaseConnection(dataSource);
     }
 
-    <R extends TableAnnotatedRecord<ID>> String getDataRecordById(ID id, Class<R> clazz)  throws EngineCodeException {
+    <R extends TableAnnotatedRecord<ID>> String getDataRecordById(ID id, Class<R> clazz) throws EngineCodeException {
         String tableName = getTableName(clazz);
         QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
         return Optional.ofNullable(
@@ -43,7 +43,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         ));
     }
 
-    <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz)  throws EngineCodeException {
+    <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) throws EngineCodeException {
         String tableName = getTableName(clazz);
         QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
         return databaseConnection.getQueryFactory()
@@ -65,15 +65,13 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
 
 
     private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) throws EngineCodeException {
-        try {
-            TableName tableName = clazz.getAnnotation(TableName.class);
-            if (tableName.value().isBlank()) {
-                throw new TableNotFoundNameMissingException(clazz.getName());
-            }
-            return tableName.value();
-        } catch (NullPointerException exc) {
-            throw new TableNotFoundAnnotationMissingException(clazz.getName());
+        String name =  Optional.ofNullable(clazz.getAnnotation(TableName.class))
+                .map(TableName::value)
+                .orElseThrow(() -> new TableNotFoundNameMissingException(clazz.getName()));
+        if (name.isBlank()) {
+            throw new TableNotFoundNameMissingException(clazz.getName());
         }
+        return name;
     }
 
     private PGobject getJsonb(String jsonData) {
