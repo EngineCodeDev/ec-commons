@@ -1,7 +1,6 @@
 package dev.enginecode.eccommons.handler;
 
 import dev.enginecode.eccommons.exception.EngineCodeException;
-import dev.enginecode.eccommons.exception.TableNotFoundAnnotationMissingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,7 +18,7 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler(EngineCodeException.class)
-    public ResponseEntity<ErrorResponse> handle(TableNotFoundAnnotationMissingException exception) {
+    public ResponseEntity<ErrorResponse> handle(EngineCodeException exception) {
         return ResponseEntity
                 .status(exception.getHttpErrorCode())
                 .body(new ErrorResponse(exception.getHttpErrorDetails(), exception.getMessage()));

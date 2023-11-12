@@ -4,7 +4,7 @@ import com.querydsl.sql.RelationalPathBase;
 import dev.enginecode.eccommons.exception.EngineCodeException;
 import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
-import dev.enginecode.eccommons.exception.TableNotFoundNameMissingException;
+import dev.enginecode.eccommons.exception.TableNotFoundException;
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
 import dev.enginecode.eccommons.infrastructure.json.model.TableName;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.DatabaseConnection;
@@ -61,9 +61,9 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
     private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) throws EngineCodeException {
         String name = Optional.ofNullable(clazz.getAnnotation(TableName.class))
                 .map(TableName::value)
-                .orElseThrow(() -> new TableNotFoundNameMissingException(clazz.getName()));
+                .orElseThrow(() -> new TableNotFoundException(TableNotFoundException.ANNOTATION_MISSING, clazz.getName()));
         if (name.isBlank()) {
-            throw new TableNotFoundNameMissingException(clazz.getName());
+            throw new TableNotFoundException(TableNotFoundException.NAME_MISSING, clazz.getName());
         }
         return name;
     }
