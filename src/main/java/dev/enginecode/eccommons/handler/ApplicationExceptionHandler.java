@@ -1,7 +1,6 @@
 package dev.enginecode.eccommons.handler;
 
 import dev.enginecode.eccommons.exception.EngineCodeException;
-import dev.enginecode.eccommons.exception.JsonObjectProcessingCannotSetTypeException;
 import dev.enginecode.eccommons.exception.TableNotFoundAnnotationMissingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +12,10 @@ import java.sql.SQLException;
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
     @ExceptionHandler(SQLException.class)
-    public ResponseEntity<ErrorResponse> handle(SQLException e) {
+    public ResponseEntity<ErrorResponse> handle(SQLException exception) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(e.getMessage()));
+                .body(new ErrorResponse(exception.getMessage()));
     }
 
     @ExceptionHandler(EngineCodeException.class)
