@@ -25,7 +25,7 @@ public class JsonMapperException extends EngineCodeException {
     }
 
     @Override
-    public ErrorCode getECErrorCode() {
+    public ErrorCode getEngineCodeError() {
         if (getMessage().startsWith(CANNOT_DESERIALIZE.substring(18))) {
             return EngineCodeErrors.CANNOT_DESERIALIZE_TO_GIVEN_CLASS;
         } else if (getMessage().startsWith(CANNOT_SERIALIZE.substring(18))) {

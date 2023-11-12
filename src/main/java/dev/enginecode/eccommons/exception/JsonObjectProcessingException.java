@@ -24,7 +24,7 @@ public class JsonObjectProcessingException extends EngineCodeException {
     }
 
     @Override
-    public ErrorCode getECErrorCode() {
+    public ErrorCode getEngineCodeError() {
         return EngineCodeErrors.CANNOT_SET_JSONB_TYPE;
     }
 }

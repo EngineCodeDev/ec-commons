@@ -25,7 +25,7 @@ public class TableNotFoundException extends EngineCodeException {
     }
 
     @Override
-    public ErrorCode getECErrorCode() {
+    public ErrorCode getEngineCodeError() {
         if (getMessage().startsWith(ANNOTATION_MISSING.substring(38))) {
             return EngineCodeErrors.TABLENAME_ANNOTATION_NOT_FOUND;
         } else if (getMessage().startsWith(NAME_MISSING.substring(38))) {

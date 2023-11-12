@@ -24,7 +24,7 @@ public class ResourceNotFoundException extends EngineCodeException {
     }
 
     @Override
-    public ErrorCode getECErrorCode() {
+    public ErrorCode getEngineCodeError() {
         return EngineCodeErrors.RESOURCE_NOT_FOUND;
     }
 }

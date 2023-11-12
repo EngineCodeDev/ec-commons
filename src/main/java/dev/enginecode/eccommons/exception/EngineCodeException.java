@@ -15,5 +15,5 @@ public abstract class EngineCodeException extends Exception{
 
     public abstract String getHttpErrorDetails();
 
-    public abstract ErrorCode getECErrorCode();
+    public abstract ErrorCode getEngineCodeError();
 }

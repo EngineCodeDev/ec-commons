@@ -22,6 +22,6 @@ public class ApplicationExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(EngineCodeException exception) {
         return ResponseEntity
                 .status(exception.getHttpErrorCode())
-                .body(new ErrorResponse(exception.getECErrorCode().getId(), exception.getMessage()));
+                .body(new ErrorResponse(exception.getEngineCodeError().getId(), exception.getMessage()));
     }
 }
