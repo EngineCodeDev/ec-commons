@@ -1,5 +1,7 @@
 package dev.enginecode.eccommons.exception;
 
+import dev.enginecode.eccommons.infrastructure.json.errors.EngineCodeErrors;
+import dev.enginecode.eccommons.infrastructure.json.errors.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class TableNotFoundException extends EngineCodeException {
@@ -20,5 +22,15 @@ public class TableNotFoundException extends EngineCodeException {
     @Override
     public String getHttpErrorDetails() {
         return HTTP_ERROR_DETAILS;
+    }
+
+    @Override
+    public ErrorCode getECErrorCode() {
+        if (getMessage().startsWith(ANNOTATION_MISSING.substring(38))) {
+            return EngineCodeErrors.TABLENAME_ANNOTATION_NOT_FOUND;
+        } else if (getMessage().startsWith(NAME_MISSING.substring(38))) {
+            return EngineCodeErrors.TABLENAME_ANNOTATION_EMPTY;
+        }
+        return EngineCodeErrors.DEFAULT_COMMON_ERROR;
     }
 }

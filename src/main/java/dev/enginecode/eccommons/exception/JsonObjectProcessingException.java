@@ -1,5 +1,7 @@
 package dev.enginecode.eccommons.exception;
 
+import dev.enginecode.eccommons.infrastructure.json.errors.EngineCodeErrors;
+import dev.enginecode.eccommons.infrastructure.json.errors.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class JsonObjectProcessingException extends EngineCodeException {
@@ -19,5 +21,10 @@ public class JsonObjectProcessingException extends EngineCodeException {
     @Override
     public String getHttpErrorDetails() {
         return HTTP_ERROR_DETAILS;
+    }
+
+    @Override
+    public ErrorCode getECErrorCode() {
+        return EngineCodeErrors.CANNOT_SET_JSONB_TYPE;
     }
 }

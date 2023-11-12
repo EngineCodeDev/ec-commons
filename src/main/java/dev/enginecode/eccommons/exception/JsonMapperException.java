@@ -1,5 +1,7 @@
 package dev.enginecode.eccommons.exception;
 
+import dev.enginecode.eccommons.infrastructure.json.errors.EngineCodeErrors;
+import dev.enginecode.eccommons.infrastructure.json.errors.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class JsonMapperException extends EngineCodeException {
@@ -20,5 +22,15 @@ public class JsonMapperException extends EngineCodeException {
     @Override
     public String getHttpErrorDetails() {
         return HTTP_ERROR_DETAILS;
+    }
+
+    @Override
+    public ErrorCode getECErrorCode() {
+        if (getMessage().startsWith(CANNOT_DESERIALIZE.substring(18))) {
+            return EngineCodeErrors.CANNOT_DESERIALIZE_TO_GIVEN_CLASS;
+        } else if (getMessage().startsWith(CANNOT_SERIALIZE.substring(18))) {
+            return EngineCodeErrors.CANNOT_SERIALIZE_TO_JSON;
+        }
+        return EngineCodeErrors.DEFAULT_COMMON_ERROR;
     }
 }
