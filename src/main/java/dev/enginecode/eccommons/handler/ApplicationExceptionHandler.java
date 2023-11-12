@@ -3,7 +3,7 @@ package dev.enginecode.eccommons.handler;
 import dev.enginecode.eccommons.exception.EngineCodeException;
 import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
-import dev.enginecode.eccommons.exception.TableNotFoundException;
+import dev.enginecode.eccommons.exception.TableNotFoundAnnotationMissingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,7 +36,7 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler(EngineCodeException.class)
-    public ResponseEntity<ErrorResponse> handle(TableNotFoundException exception) {
+    public ResponseEntity<ErrorResponse> handle(TableNotFoundAnnotationMissingException exception) {
         return ResponseEntity
                 .status(exception.getHttpErrorCode())
                 .body(new ErrorResponse(exception.getHttpErrorDetails(), exception.getMessage()));
