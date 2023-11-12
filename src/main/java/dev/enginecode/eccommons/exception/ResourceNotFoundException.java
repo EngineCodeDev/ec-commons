@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 
 public class ResourceNotFoundException extends EngineCodeException {
     private final static int HTTP_ERROR_CODE = HttpStatus.NOT_FOUND.value();
-    private final static String HTTP_ERROR_DETAILS = HttpStatus.NOT_FOUND.toString();
     private final static String NOT_FOUND_FOR_ID = "Resource with id: '%s' not found!";
     private final static String NOT_FOUND_ANY = "Any resource was not not found!";
 
@@ -21,11 +20,6 @@ public class ResourceNotFoundException extends EngineCodeException {
     @Override
     public int getHttpErrorCode() {
         return HTTP_ERROR_CODE;
-    }
-
-    @Override
-    public String getHttpErrorDetails() {
-        return HTTP_ERROR_DETAILS;
     }
 
     @Override
