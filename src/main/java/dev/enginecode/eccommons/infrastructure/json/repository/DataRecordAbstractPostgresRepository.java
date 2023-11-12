@@ -4,7 +4,6 @@ import com.querydsl.sql.RelationalPathBase;
 import dev.enginecode.eccommons.exception.EngineCodeException;
 import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
-import dev.enginecode.eccommons.exception.TableNotFoundAnnotationMissingException;
 import dev.enginecode.eccommons.exception.TableNotFoundNameMissingException;
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
 import dev.enginecode.eccommons.infrastructure.json.model.TableName;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.CANNOT_SET_JSONB_TYPE;
-import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.RESOURCE_NOT_FOUND;
 
 public abstract class DataRecordAbstractPostgresRepository<ID extends Serializable> implements JsonRepository<ID> {
 
@@ -38,9 +36,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                         .from(record)
                         .where(record.id.eq(id))
                         .fetchOne()
-        ).orElseThrow(() -> new ResourceNotFoundException(
-                "Resource with id: '" + id + "' not found!", RESOURCE_NOT_FOUND
-        ));
+        ).orElseThrow(() -> new ResourceNotFoundException(id.toString()));
     }
 
     <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) throws EngineCodeException {
@@ -65,7 +61,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
 
 
     private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) throws EngineCodeException {
-        String name =  Optional.ofNullable(clazz.getAnnotation(TableName.class))
+        String name = Optional.ofNullable(clazz.getAnnotation(TableName.class))
                 .map(TableName::value)
                 .orElseThrow(() -> new TableNotFoundNameMissingException(clazz.getName()));
         if (name.isBlank()) {
