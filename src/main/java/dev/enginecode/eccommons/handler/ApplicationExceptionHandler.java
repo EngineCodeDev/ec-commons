@@ -1,5 +1,6 @@
 package dev.enginecode.eccommons.handler;
 
+import dev.enginecode.eccommons.exception.EngineCodeException;
 import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
 import dev.enginecode.eccommons.exception.TableNotFoundException;
@@ -34,11 +35,10 @@ public class ApplicationExceptionHandler {
                 .body(new ErrorResponse(e.getCode().toString(), e.getMessage()));
     }
 
-    @ExceptionHandler(TableNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handle(TableNotFoundException e) {
+    @ExceptionHandler(EngineCodeException.class)
+    public ResponseEntity<ErrorResponse> handle(TableNotFoundException exception) {
         return ResponseEntity
-                .status(e.getCode().getHttpStatus())
-                .body(new ErrorResponse(e.getCode().toString(), e.getMessage()));
+                .status(exception.getHttpErrorCode())
+                .body(new ErrorResponse(exception.getHttpErrorDetails(), exception.getMessage()));
     }
-
 }

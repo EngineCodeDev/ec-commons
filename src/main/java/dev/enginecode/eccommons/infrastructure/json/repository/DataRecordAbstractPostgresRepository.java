@@ -1,6 +1,7 @@
 package dev.enginecode.eccommons.infrastructure.json.repository;
 
 import com.querydsl.sql.RelationalPathBase;
+import dev.enginecode.eccommons.exception.EngineCodeException;
 import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
 import dev.enginecode.eccommons.exception.TableNotFoundException;
@@ -61,7 +62,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
     }
 
 
-    private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) {
+    private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) throws EngineCodeException {
         try {
             TableName tableName = clazz.getAnnotation(TableName.class);
 
@@ -69,10 +70,8 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                     "Lack of name in TableName annotation for class: '" + clazz.getName() + "'", TABLENAME_ANNOTATION_EMPTY
             );
             return tableName.value();
-        } catch (NullPointerException e) {
-            throw new TableNotFoundException(
-                    "Lack of TableName annotation for class: '" + clazz.getName() + "'", TABLENAME_ANNOTATION_NOT_FOUND
-            );
+        } catch (NullPointerException exc) {
+            throw new TableNotFoundException(clazz.getName());
         }
     }
 

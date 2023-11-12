@@ -1,14 +1,23 @@
 package dev.enginecode.eccommons.exception;
 
-public class TableNotFoundException extends RuntimeException {
-    private final ErrorCode code;
+import org.springframework.http.HttpStatus;
 
-    public TableNotFoundException(String message, ErrorCode code) {
-        super(message);
-        this.code = code;
+public class TableNotFoundException extends EngineCodeException {
+    public final static int HTTP_ERROR_CODE = HttpStatus.INTERNAL_SERVER_ERROR.value();
+    public final static String HTTP_ERROR_DETAILS = HttpStatus.INTERNAL_SERVER_ERROR.toString();
+    private final static String MESSAGE = "Lack of TableName annotation for class: '%s'";
+
+    public TableNotFoundException(String className) {
+        super(String.format(MESSAGE, className));
     }
 
-    public ErrorCode getCode() {
-        return code;
+    @Override
+    public int getHttpErrorCode() {
+        return HTTP_ERROR_CODE;
+    }
+
+    @Override
+    public String getHttpErrorDetails() {
+        return HTTP_ERROR_DETAILS;
     }
 }
