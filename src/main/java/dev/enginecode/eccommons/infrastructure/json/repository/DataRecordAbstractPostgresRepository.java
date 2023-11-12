@@ -2,7 +2,7 @@ package dev.enginecode.eccommons.infrastructure.json.repository;
 
 import com.querydsl.sql.RelationalPathBase;
 import dev.enginecode.eccommons.exception.EngineCodeException;
-import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
+import dev.enginecode.eccommons.exception.JsonObjectProcessingCannotSetTypeException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
 import dev.enginecode.eccommons.exception.TableNotFoundNameMissingException;
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
@@ -70,13 +70,14 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         return name;
     }
 
-    private PGobject getJsonb(String jsonData) {
+    private PGobject getJsonb(String jsonData) throws EngineCodeException {
         PGobject pgObject = new PGobject();
-        pgObject.setType("jsonb");
+        String jsonType = "jsonb";
+        pgObject.setType(jsonType);
         try {
             pgObject.setValue(jsonData);
-        } catch (SQLException e) {
-            throw new JsonObjectProcessingException(e.getMessage(), CANNOT_SET_JSONB_TYPE);
+        } catch (SQLException exc) {
+            throw new JsonObjectProcessingCannotSetTypeException(jsonType, exc.getMessage());
         }
         return pgObject;
     }

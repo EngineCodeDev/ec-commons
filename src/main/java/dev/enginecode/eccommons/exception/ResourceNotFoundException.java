@@ -21,4 +21,3 @@ public class ResourceNotFoundException extends EngineCodeException {
         return HTTP_ERROR_DETAILS;
     }
 }
-
