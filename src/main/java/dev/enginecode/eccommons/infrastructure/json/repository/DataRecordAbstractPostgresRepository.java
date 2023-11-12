@@ -17,8 +17,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.CANNOT_SET_JSONB_TYPE;
-
 public abstract class DataRecordAbstractPostgresRepository<ID extends Serializable> implements JsonRepository<ID> {
 
     private final DatabaseConnection databaseConnection;
@@ -51,11 +49,11 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
     <R extends TableAnnotatedRecord<ID>> void saveDataRecord(JsonRepository.DataRecord<ID> dataRecord, Class<R> clazz) throws EngineCodeException {
         String tableName = getTableName(clazz);
         RelationalPathBase<?> record = new RelationalPathBase<>(QJsonRepository_DataRecord.class, "", null, tableName);
-        PGobject pgJsonb = getJsonb(dataRecord.data());
+        PGobject postgresqlObject = convertToPostgresqlObject(dataRecord.data());
 
         databaseConnection.getQueryFactory()
                 .insert(record)
-                .values(dataRecord.id(), pgJsonb)
+                .values(dataRecord.id(), postgresqlObject)
                 .execute();
     }
 
@@ -70,7 +68,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         return name;
     }
 
-    private PGobject getJsonb(String jsonData) throws EngineCodeException {
+    private PGobject convertToPostgresqlObject(String jsonData) throws EngineCodeException {
         PGobject pgObject = new PGobject();
         String jsonType = "jsonb";
         pgObject.setType(jsonType);
