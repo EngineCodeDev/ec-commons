@@ -75,7 +75,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         try {
             pgObject.setValue(jsonData);
         } catch (SQLException exc) {
-            throw new JsonObjectProcessingException(JsonObjectProcessingException.CANNOT_SET_TYPE, jsonType, exc);
+            throw new JsonObjectProcessingException(jsonType, exc);
         }
         return pgObject;
     }
