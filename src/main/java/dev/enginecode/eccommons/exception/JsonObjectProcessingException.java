@@ -1,10 +1,10 @@
 package dev.enginecode.eccommons.exception;
 
-import dev.enginecode.eccommons.infrastructure.json.errors.EngineCodeErrors;
-import dev.enginecode.eccommons.infrastructure.json.errors.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class JsonObjectProcessingException extends EngineCodeException {
+    //TODO: less details
+    //TODO: add more generic constructor
     public final static String CANNOT_SET_TYPE = "Cannot set json type: '%s', it caused error: %s";
     private final static int HTTP_ERROR_CODE = HttpStatus.INTERNAL_SERVER_ERROR.value();
 
@@ -17,8 +17,13 @@ public class JsonObjectProcessingException extends EngineCodeException {
         return HTTP_ERROR_CODE;
     }
 
-    @Override
-    public ErrorCode getEngineCodeError() {
-        return EngineCodeErrors.CANNOT_SET_JSONB_TYPE;
+    @Override //TODO
+    public String getExceptionGroup() {
+        return null;
     }
+
+//    @Override
+//    public ExceptionGroup getExceptionGroup() {
+//        return EngineCodeExceptionGroup.CANNOT_SET_JSONB_TYPE;
+//    }
 }

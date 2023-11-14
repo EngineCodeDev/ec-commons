@@ -1,7 +1,7 @@
 package dev.enginecode.eccommons.handler;
 
 import dev.enginecode.eccommons.exception.EngineCodeException;
-import dev.enginecode.eccommons.infrastructure.json.errors.EngineCodeErrors;
+import dev.enginecode.eccommons.exception.EngineCodeExceptionGroup;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,13 +15,13 @@ public class ApplicationExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(SQLException exception) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(EngineCodeErrors.DEFAULT_COMMON_ERROR.getId(), exception.getMessage()));
+                .body(new ErrorResponse(EngineCodeExceptionGroup.INFRASTRUCTURE_ERROR.get(), exception.getMessage()));
     }
 
     @ExceptionHandler(EngineCodeException.class)
     public ResponseEntity<ErrorResponse> handle(EngineCodeException exception) {
         return ResponseEntity
                 .status(exception.getHttpErrorCode())
-                .body(new ErrorResponse(exception.getEngineCodeError().getId(), exception.getMessage()));
+                .body(new ErrorResponse(exception.getExceptionGroup(), exception.getMessage()));
     }
 }

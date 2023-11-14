@@ -1,7 +1,6 @@
 package dev.enginecode.eccommons.exception;
 
-import dev.enginecode.eccommons.infrastructure.json.errors.ErrorCode;
-
+//todo: use runtimeexc
 public abstract class EngineCodeException extends Exception{
     public EngineCodeException(String message) {
         super(message);
@@ -13,5 +12,5 @@ public abstract class EngineCodeException extends Exception{
 
     public abstract int getHttpErrorCode();
 
-    public abstract ErrorCode getEngineCodeError();
+    public abstract String getExceptionGroup();
 }

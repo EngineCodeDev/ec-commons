@@ -1,10 +1,10 @@
 package dev.enginecode.eccommons.exception;
 
-import dev.enginecode.eccommons.infrastructure.json.errors.EngineCodeErrors;
-import dev.enginecode.eccommons.infrastructure.json.errors.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public class ResourceNotFoundException extends EngineCodeException {
+    //TODO: less details
+    //TODO: add more generic constructor
     private final static int HTTP_ERROR_CODE = HttpStatus.NOT_FOUND.value();
     private final static String NOT_FOUND_FOR_ID = "Resource with id: '%s' not found!";
     private final static String NOT_FOUND_ANY = "Any resource was not not found!";
@@ -22,8 +22,13 @@ public class ResourceNotFoundException extends EngineCodeException {
         return HTTP_ERROR_CODE;
     }
 
-    @Override
-    public ErrorCode getEngineCodeError() {
-        return EngineCodeErrors.RESOURCE_NOT_FOUND;
+    @Override //TODO
+    public String getExceptionGroup() {
+        return null;
     }
+
+//    @Override
+//    public ExceptionGroup getExceptionGroup() {
+//        return EngineCodeExceptionGroup.RESOURCE_NOT_FOUND;
+//    }
 }
