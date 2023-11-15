@@ -57,7 +57,7 @@ public abstract class Entry<T> {
             case "enum_key_array" -> new StringArrayEntry(key, (String[]) value, Type.ENUM_KEY_ARRAY, info);
             case "enum_array" -> new EnumArrayEntry(key, (StringEntry[]) value, Type.ENUM_ARRAY, info);
             default -> {
-                logger.error(String.format(WRONG_TYPE_DETAILED, type.toLowerCase().trim() + "[class Entry<T> -> of()]"));
+                logger.error(String.format(WRONG_TYPE_DETAILED, type.toLowerCase().trim() + " [in factory method of()]"));
                 throw new NotSupportedEntryException(INFRASTRUCTURE_ERROR, WRONG_TYPE);
             }
         };
