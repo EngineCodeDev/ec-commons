@@ -1,15 +1,21 @@
 package dev.enginecode.eccommons.exception;
 
 public abstract class EngineCodeException extends RuntimeException {
-    public EngineCodeException(String message) {
-        super(message);
+    protected final ExceptionGroup exceptionGroup;
+
+    public EngineCodeException(ExceptionGroup exceptionGroup, String message, Throwable cause) {
+        super(message, cause);
+        this.exceptionGroup = exceptionGroup;
     }
 
-    public EngineCodeException(String message, Throwable cause) {
-        super(message, cause);
+    public EngineCodeException(ExceptionGroup exceptionGroup, String message) {
+        super(message);
+        this.exceptionGroup = exceptionGroup;
     }
 
     public abstract int getHttpErrorCode();
 
-    public abstract String getExceptionGroup();
+    public String getExceptionGroup() {
+        return exceptionGroup.get();
+    }
 }

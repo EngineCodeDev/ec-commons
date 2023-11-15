@@ -8,6 +8,8 @@ import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
 import dev.enginecode.eccommons.infrastructure.json.model.TableName;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.DatabaseConnection;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.PostgresDatabaseConnection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.postgresql.util.PGobject;
 
 import javax.sql.DataSource;
@@ -16,8 +18,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import static dev.enginecode.eccommons.exception.EngineCodeExceptionGroup.INFRASTRUCTURE_ERROR;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING_DETAILED;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.NAME_MISSING;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.NAME_MISSING_DETAILED;
+
 public abstract class DataRecordAbstractPostgresRepository<ID extends Serializable> implements JsonRepository<ID> {
 
+    private static final Logger logger = LogManager.getLogger(DataRecordAbstractPostgresRepository.class);
     private final DatabaseConnection databaseConnection;
 
     public DataRecordAbstractPostgresRepository(DataSource dataSource) {
@@ -60,9 +69,13 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
     private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) {
         String name = Optional.ofNullable(clazz.getAnnotation(TableName.class))
                 .map(TableName::value)
-                .orElseThrow(() -> new TableNotFoundException(TableNotFoundException.ANNOTATION_MISSING, clazz.getName()));
+                .orElseGet(() -> {
+                    logger.error(String.format(ANNOTATION_MISSING_DETAILED, clazz));
+                    throw new TableNotFoundException(INFRASTRUCTURE_ERROR, ANNOTATION_MISSING);
+                });
         if (name.isBlank()) {
-            throw new TableNotFoundException(TableNotFoundException.NAME_MISSING, clazz.getName());
+            logger.error(String.format(NAME_MISSING_DETAILED, clazz));
+            throw new TableNotFoundException(INFRASTRUCTURE_ERROR, NAME_MISSING);
         }
         return name;
     }
