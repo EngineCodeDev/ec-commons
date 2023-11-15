@@ -3,33 +3,22 @@ package dev.enginecode.eccommons.exception;
 import org.springframework.http.HttpStatus;
 
 public class JsonMapperException extends EngineCodeException {
-    //TODO: less details
-    //TODO: add more generic constructor
-    public final static String CANNOT_DESERIALIZE = "Cannot deserialize data: '%s' to class: '%s', it caused error: %s";
-    public final static String CANNOT_SERIALIZE = "Cannot serialize object: '%s', class: '%s' to json, it caused error: %s";
+    public final static String CANNOT_DESERIALIZE_DETAILED = "Cannot deserialize data: '%s' to class: '%s', it caused error: %s";
+    public final static String CANNOT_DESERIALIZE = "Internal error for data parsing in database processing.";
+    public final static String CANNOT_SERIALIZE_DETAILED = "Cannot serialize object: '%s', class: '%s' to json, it caused error: %s";
+    public final static String CANNOT_SERIALIZE = CANNOT_DESERIALIZE;
     private final static int HTTP_ERROR_CODE = HttpStatus.UNPROCESSABLE_ENTITY.value();
 
-    public JsonMapperException(String message, String problematicItem, String problematicClassName, Throwable exception) {
-        super(String.format(message, problematicItem, problematicClassName, exception.getMessage()));
+    public JsonMapperException(ExceptionGroup exceptionGroup, String message, Throwable cause) {
+        super(exceptionGroup, message, cause);
+    }
+
+    public JsonMapperException(ExceptionGroup exceptionGroup, String message) {
+        super(exceptionGroup, message);
     }
 
     @Override
     public int getHttpErrorCode() {
         return HTTP_ERROR_CODE;
     }
-
-    @Override //TODO
-    public String getExceptionGroup() {
-        return null;
-    }
-
-    //    @Override
-//    public ExceptionGroup getEngineCodeError() {
-//        if (getMessage().startsWith(CANNOT_DESERIALIZE.substring(18))) {
-//            return EngineCodeExceptionGroup.CANNOT_DESERIALIZE_TO_GIVEN_CLASS;
-//        } else if (getMessage().startsWith(CANNOT_SERIALIZE.substring(18))) {
-//            return EngineCodeExceptionGroup.CANNOT_SERIALIZE_TO_JSON;
-//        }
-//        return EngineCodeExceptionGroup.DEFAULT_COMMON_ERROR;
-//    }
 }
