@@ -21,6 +21,8 @@ import java.util.Optional;
 import static dev.enginecode.eccommons.exception.EngineCodeExceptionGroup.INFRASTRUCTURE_ERROR;
 import static dev.enginecode.eccommons.exception.JsonObjectProcessingException.CANNOT_SET_TYPE;
 import static dev.enginecode.eccommons.exception.JsonObjectProcessingException.CANNOT_SET_TYPE_DETAILED;
+import static dev.enginecode.eccommons.exception.ResourceNotFoundException.NOT_FOUND_FOR_ID;
+import static dev.enginecode.eccommons.exception.ResourceNotFoundException.NOT_FOUND_FOR_ID_DETAILED;
 import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING;
 import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING_DETAILED;
 import static dev.enginecode.eccommons.exception.TableNotFoundException.NAME_MISSING;
@@ -44,7 +46,10 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                         .from(record)
                         .where(record.id.eq(id))
                         .fetchOne()
-        ).orElseThrow(() -> new ResourceNotFoundException(id.toString()));
+        ).orElseGet(() -> {
+            logger.error(String.format(NOT_FOUND_FOR_ID_DETAILED, id.toString()));
+            throw new ResourceNotFoundException(INFRASTRUCTURE_ERROR, NOT_FOUND_FOR_ID);
+        });
     }
 
     <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) {
