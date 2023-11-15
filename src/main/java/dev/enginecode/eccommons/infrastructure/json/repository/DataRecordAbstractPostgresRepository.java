@@ -8,6 +8,8 @@ import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
 import dev.enginecode.eccommons.infrastructure.json.model.TableName;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.DatabaseConnection;
 import dev.enginecode.eccommons.infrastructure.json.repository.database.PostgresDatabaseConnection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.postgresql.util.PGobject;
 
 import javax.sql.DataSource;
@@ -16,10 +18,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static dev.enginecode.eccommons.infrastructure.json.errors.InfrastructureErrorCode.*;
+import static dev.enginecode.eccommons.exception.EngineCodeExceptionGroup.INFRASTRUCTURE_ERROR;
+import static dev.enginecode.eccommons.exception.JsonObjectProcessingException.CANNOT_SET_TYPE;
+import static dev.enginecode.eccommons.exception.JsonObjectProcessingException.CANNOT_SET_TYPE_DETAILED;
+import static dev.enginecode.eccommons.exception.ResourceNotFoundException.NOT_FOUND_FOR_ID;
+import static dev.enginecode.eccommons.exception.ResourceNotFoundException.NOT_FOUND_FOR_ID_DETAILED;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING_DETAILED;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.NAME_MISSING;
+import static dev.enginecode.eccommons.exception.TableNotFoundException.NAME_MISSING_DETAILED;
 
 public abstract class DataRecordAbstractPostgresRepository<ID extends Serializable> implements JsonRepository<ID> {
 
+    private static final Logger logger = LogManager.getLogger(DataRecordAbstractPostgresRepository.class);
     private final DatabaseConnection databaseConnection;
 
     public DataRecordAbstractPostgresRepository(DataSource dataSource) {
@@ -35,9 +46,10 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                         .from(record)
                         .where(record.id.eq(id))
                         .fetchOne()
-        ).orElseThrow(() -> new ResourceNotFoundException(
-                "Resource with id: '" + id + "' not found!", RESOURCE_NOT_FOUND
-        ));
+        ).orElseGet(() -> {
+            logger.error(String.format(NOT_FOUND_FOR_ID_DETAILED, id.toString()));
+            throw new ResourceNotFoundException(INFRASTRUCTURE_ERROR, NOT_FOUND_FOR_ID);
+        });
     }
 
     <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) {
@@ -52,37 +64,38 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
     <R extends TableAnnotatedRecord<ID>> void saveDataRecord(JsonRepository.DataRecord<ID> dataRecord, Class<R> clazz) {
         String tableName = getTableName(clazz);
         RelationalPathBase<?> record = new RelationalPathBase<>(QJsonRepository_DataRecord.class, "", null, tableName);
-        PGobject pgJsonb = getJsonb(dataRecord.data());
+        PGobject postgresqlObject = convertToPostgresqlObject(dataRecord.data());
 
         databaseConnection.getQueryFactory()
                 .insert(record)
-                .values(dataRecord.id(), pgJsonb)
+                .values(dataRecord.id(), postgresqlObject)
                 .execute();
     }
 
 
     private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) {
-        try {
-            TableName tableName = clazz.getAnnotation(TableName.class);
-
-            if (tableName.value().isBlank()) throw new TableNotFoundException(
-                    "Lack of name in TableName annotation for class: '" + clazz.getName() + "'", TABLENAME_ANNOTATION_EMPTY
-            );
-            return tableName.value();
-        } catch (NullPointerException e) {
-            throw new TableNotFoundException(
-                    "Lack of TableName annotation for class: '" + clazz.getName() + "'", TABLENAME_ANNOTATION_NOT_FOUND
-            );
+        String name = Optional.ofNullable(clazz.getAnnotation(TableName.class))
+                .map(TableName::value)
+                .orElseGet(() -> {
+                    logger.error(String.format(ANNOTATION_MISSING_DETAILED, clazz));
+                    throw new TableNotFoundException(INFRASTRUCTURE_ERROR, ANNOTATION_MISSING);
+                });
+        if (name.isBlank()) {
+            logger.error(String.format(NAME_MISSING_DETAILED, clazz));
+            throw new TableNotFoundException(INFRASTRUCTURE_ERROR, NAME_MISSING);
         }
+        return name;
     }
 
-    private PGobject getJsonb(String jsonData) {
+    private PGobject convertToPostgresqlObject(String jsonData) {
         PGobject pgObject = new PGobject();
-        pgObject.setType("jsonb");
+        String jsonType = "jsonb";
+        pgObject.setType(jsonType);
         try {
             pgObject.setValue(jsonData);
-        } catch (SQLException e) {
-            throw new JsonObjectProcessingException(e.getMessage(), CANNOT_SET_JSONB_TYPE);
+        } catch (SQLException exc) {
+            logger.error(String.format(CANNOT_SET_TYPE_DETAILED, jsonType, exc), exc);
+            throw new JsonObjectProcessingException(INFRASTRUCTURE_ERROR, CANNOT_SET_TYPE);
         }
         return pgObject;
     }
