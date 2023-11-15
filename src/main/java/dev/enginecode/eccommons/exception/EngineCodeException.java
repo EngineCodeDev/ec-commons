@@ -1,7 +1,6 @@
 package dev.enginecode.eccommons.exception;
 
-//todo: use runtimeexc
-public abstract class EngineCodeException extends Exception{
+public abstract class EngineCodeException extends RuntimeException {
     public EngineCodeException(String message) {
         super(message);
     }

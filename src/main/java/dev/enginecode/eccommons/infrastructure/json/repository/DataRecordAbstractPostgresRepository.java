@@ -1,7 +1,6 @@
 package dev.enginecode.eccommons.infrastructure.json.repository;
 
 import com.querydsl.sql.RelationalPathBase;
-import dev.enginecode.eccommons.exception.EngineCodeException;
 import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
 import dev.enginecode.eccommons.exception.TableNotFoundException;
@@ -25,7 +24,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         databaseConnection = new PostgresDatabaseConnection(dataSource);
     }
 
-    <R extends TableAnnotatedRecord<ID>> String getDataRecordById(ID id, Class<R> clazz) throws EngineCodeException {
+    <R extends TableAnnotatedRecord<ID>> String getDataRecordById(ID id, Class<R> clazz) {
         String tableName = getTableName(clazz);
         QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
         return Optional.ofNullable(
@@ -37,7 +36,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         ).orElseThrow(() -> new ResourceNotFoundException(id.toString()));
     }
 
-    <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) throws EngineCodeException {
+    <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) {
         String tableName = getTableName(clazz);
         QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
         return databaseConnection.getQueryFactory()
@@ -46,7 +45,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                 .fetch();
     }
 
-    <R extends TableAnnotatedRecord<ID>> void saveDataRecord(JsonRepository.DataRecord<ID> dataRecord, Class<R> clazz) throws EngineCodeException {
+    <R extends TableAnnotatedRecord<ID>> void saveDataRecord(JsonRepository.DataRecord<ID> dataRecord, Class<R> clazz) {
         String tableName = getTableName(clazz);
         RelationalPathBase<?> record = new RelationalPathBase<>(QJsonRepository_DataRecord.class, "", null, tableName);
         PGobject postgresqlObject = convertToPostgresqlObject(dataRecord.data());
@@ -58,7 +57,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
     }
 
 
-    private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) throws EngineCodeException {
+    private <R extends TableAnnotatedRecord<ID>> String getTableName(Class<R> clazz) {
         String name = Optional.ofNullable(clazz.getAnnotation(TableName.class))
                 .map(TableName::value)
                 .orElseThrow(() -> new TableNotFoundException(TableNotFoundException.ANNOTATION_MISSING, clazz.getName()));
@@ -68,7 +67,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         return name;
     }
 
-    private PGobject convertToPostgresqlObject(String jsonData) throws EngineCodeException {
+    private PGobject convertToPostgresqlObject(String jsonData) {
         PGobject pgObject = new PGobject();
         String jsonType = "jsonb";
         pgObject.setType(jsonType);

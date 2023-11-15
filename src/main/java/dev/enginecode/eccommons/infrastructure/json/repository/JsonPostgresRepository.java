@@ -1,6 +1,5 @@
 package dev.enginecode.eccommons.infrastructure.json.repository;
 
-import dev.enginecode.eccommons.exception.EngineCodeException;
 import dev.enginecode.eccommons.infrastructure.json.model.TableAnnotatedRecord;
 import dev.enginecode.eccommons.infrastructure.json.repository.mapping.JsonMapper;
 import dev.enginecode.eccommons.infrastructure.json.repository.mapping.ObjectMapping;
@@ -20,13 +19,13 @@ public class JsonPostgresRepository<ID extends Serializable> extends DataRecordA
     }
 
     @Override
-    public <R extends TableAnnotatedRecord<ID>> R findById(ID id, Class<R> clazz) throws EngineCodeException {
+    public <R extends TableAnnotatedRecord<ID>> R findById(ID id, Class<R> clazz) {
         String dataRecord = getDataRecordById(id, clazz);
         return mapper.read(dataRecord, clazz);
     }
 
     @Override
-    public <R extends TableAnnotatedRecord<ID>> List<R> findAll(Class<R> clazz) throws EngineCodeException {
+    public <R extends TableAnnotatedRecord<ID>> List<R> findAll(Class<R> clazz) {
         List<String> dataRecordsList = getAllDataRecords(clazz);
         List<R> readRecords = new ArrayList<>();
         for (String dataRecord : dataRecordsList) {
@@ -36,7 +35,7 @@ public class JsonPostgresRepository<ID extends Serializable> extends DataRecordA
     }
 
     @Override
-    public <R extends TableAnnotatedRecord<ID>> void save(R object, Class<R> clazz) throws EngineCodeException {
+    public <R extends TableAnnotatedRecord<ID>> void save(R object, Class<R> clazz) {
         String data = mapper.write(object, clazz);
         DataRecord<ID> dataRecord = new DataRecord<>(object.id(), data);
 
