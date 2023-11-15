@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static dev.enginecode.eccommons.exception.EngineCodeExceptionGroup.INFRASTRUCTURE_ERROR;
+import static dev.enginecode.eccommons.exception.JsonObjectProcessingException.CANNOT_SET_TYPE;
+import static dev.enginecode.eccommons.exception.JsonObjectProcessingException.CANNOT_SET_TYPE_DETAILED;
 import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING;
 import static dev.enginecode.eccommons.exception.TableNotFoundException.ANNOTATION_MISSING_DETAILED;
 import static dev.enginecode.eccommons.exception.TableNotFoundException.NAME_MISSING;
@@ -87,7 +89,8 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         try {
             pgObject.setValue(jsonData);
         } catch (SQLException exc) {
-            throw new JsonObjectProcessingException(jsonType, exc);
+            logger.error(String.format(CANNOT_SET_TYPE_DETAILED, jsonType, exc), exc);
+            throw new JsonObjectProcessingException(INFRASTRUCTURE_ERROR, CANNOT_SET_TYPE);
         }
         return pgObject;
     }
