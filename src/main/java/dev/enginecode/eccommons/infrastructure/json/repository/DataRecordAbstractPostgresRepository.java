@@ -1,5 +1,7 @@
 package dev.enginecode.eccommons.infrastructure.json.repository;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.RelationalPathBase;
 import dev.enginecode.eccommons.exception.JsonObjectProcessingException;
 import dev.enginecode.eccommons.exception.ResourceNotFoundException;
@@ -40,6 +42,28 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         ));
     }
 
+    <R extends TableAnnotatedRecord<ID>> List<String> getDataRecordsByEntry(String entryKey, String entryValue, Class<R> clazz) {
+        String tableName = getTableName(clazz);
+        QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
+
+        String conditionTemplate = """
+                    {0} -> 'entries' @> (
+                        SELECT jsonb_agg(jsonb_build_object('key', entry->'key', 'value', entry->'value'))
+                        FROM jsonb_array_elements({1}->'entries') entry
+                        WHERE entry->>'key' = {2} AND entry->>'value' = {3})""";
+
+        return getDataRecordsWithCondition(
+                Expressions.booleanTemplate(conditionTemplate, record.data, record.data, entryKey, entryValue),
+                tableName
+        );
+    }
+
+    <R extends TableAnnotatedRecord<ID>> List<String> getDataRecordsByColumn(String columnName, String value, Class<R> clazz) {
+        String tableName = getTableName(clazz);
+        StringPath column = Expressions.stringPath(columnName);
+        return getDataRecordsWithCondition(column.eq(value), tableName);
+    }
+
     <R extends TableAnnotatedRecord<ID>> List<String> getAllDataRecords(Class<R> clazz) {
         String tableName = getTableName(clazz);
         QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
@@ -58,6 +82,16 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                 .insert(record)
                 .values(dataRecord.id(), pgJsonb)
                 .execute();
+    }
+
+    private List<String> getDataRecordsWithCondition(Predicate condition, String tableName) {
+        QJsonRepository_DataRecord record = new QJsonRepository_DataRecord(tableName);
+
+        return databaseConnection.getQueryFactory()
+                .select(record.data)
+                .from(record)
+                .where(condition)
+                .fetch();
     }
 
 
