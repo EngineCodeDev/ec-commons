@@ -3,8 +3,15 @@ package dev.enginecode.eccommons.structures.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dev.enginecode.eccommons.exception.NotSupportedEntryException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
+
+import static dev.enginecode.eccommons.exception.EngineCodeExceptionGroup.INFRASTRUCTURE_ERROR;
+import static dev.enginecode.eccommons.exception.NotSupportedEntryException.WRONG_TYPE;
+import static dev.enginecode.eccommons.exception.NotSupportedEntryException.WRONG_TYPE_DETAILED;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -22,12 +29,14 @@ import java.util.Objects;
         @JsonSubTypes.Type(value = EnumArrayEntry.class, name = "enum_array")
 })
 public abstract class Entry<T> {
+    private static final Logger logger = LogManager.getLogger(Entry.class);
     private String key;
     private T value;
     private Type type;
     private String info;
 
-    public Entry() {}
+    public Entry() {
+    }
 
     public Entry(String key, T value, Type type, String info) {
         this.key = key;
@@ -47,7 +56,10 @@ public abstract class Entry<T> {
             case "string_array" -> new StringArrayEntry(key, (String[]) value, Type.STRING_ARRAY, info);
             case "enum_key_array" -> new StringArrayEntry(key, (String[]) value, Type.ENUM_KEY_ARRAY, info);
             case "enum_array" -> new EnumArrayEntry(key, (StringEntry[]) value, Type.ENUM_ARRAY, info);
-            default -> throw new RuntimeException();
+            default -> {
+                logger.error(String.format(WRONG_TYPE_DETAILED, type.toLowerCase().trim() + " [in factory method of()]"));
+                throw new NotSupportedEntryException(INFRASTRUCTURE_ERROR, WRONG_TYPE);
+            }
         };
     }
 

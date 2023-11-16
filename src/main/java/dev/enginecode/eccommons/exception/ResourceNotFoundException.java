@@ -1,14 +1,24 @@
 package dev.enginecode.eccommons.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
-    private final ErrorCode code;
+import org.springframework.http.HttpStatus;
 
-    public ResourceNotFoundException(String message, ErrorCode code) {
-        super(message);
-        this.code = code;
+public class ResourceNotFoundException extends EngineCodeException {
+    public final static String NOT_FOUND_FOR_ID_DETAILED = "Resource with id: '%s' not found!";
+    public final static String NOT_FOUND_FOR_ID = "Resource not found.";
+    public final static String NOT_FOUND_ANY_DETAILED = "Any resource was not not found in: '%s'.";
+    public final static String NOT_FOUND_ANY = NOT_FOUND_FOR_ID;
+    private final static int HTTP_ERROR_CODE = HttpStatus.NOT_FOUND.value();
+
+    public ResourceNotFoundException(ExceptionGroup exceptionGroup, String message, Throwable cause) {
+        super(exceptionGroup, message, cause);
     }
 
-    public ErrorCode getCode() {
-        return code;
+    public ResourceNotFoundException(ExceptionGroup exceptionGroup, String message) {
+        super(exceptionGroup, message);
+    }
+
+    @Override
+    public int getHttpErrorCode() {
+        return HTTP_ERROR_CODE;
     }
 }
