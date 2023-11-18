@@ -25,6 +25,22 @@ public class JsonPostgresRepository<ID extends Serializable> extends DataRecordA
     }
 
     @Override
+    public <R extends TableAnnotatedRecord<ID>> List<R> findByVirtualColumn(String columnName, String value, Class<R> clazz) {
+        List<String> dataRecordsList = getDataRecordsByColumn(columnName, value, clazz);
+        return dataRecordsList.stream()
+                .map(dataRecord -> mapper.read(dataRecord, clazz))
+                .toList();
+    }
+
+    @Override
+    public <R extends TableAnnotatedRecord<ID>> List<R> findByEntryValue(String entryKey, String entryValue, Class<R> clazz) {
+        List<String> dataRecordsList = getDataRecordsByEntry(entryKey, entryValue, clazz);
+        return dataRecordsList.stream()
+                .map(dataRecord -> mapper.read(dataRecord, clazz))
+                .toList();
+    }
+
+    @Override
     public <R extends TableAnnotatedRecord<ID>> List<R> findAll(Class<R> clazz) {
         List<String> dataRecordsList = getAllDataRecords(clazz);
         List<R> readRecords = new ArrayList<>();
