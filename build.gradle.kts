@@ -14,6 +14,9 @@ version = "0.0.2-SNAPSHOT"
 java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("--enable-preview")
+}
 
 repositories {
     mavenLocal()

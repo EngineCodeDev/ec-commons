@@ -221,15 +221,17 @@ abstract class JsonMapperTestData extends Specification {
         {
           "id": "8fd1980d-3151-4d00-8495-5a10bf8e7099",
           "entrySettings": {
-            "genus": {"type": "string", "format": null, "optionsRef": null, "required": true, "readOnly": true},
-            "family": {"type": "string", "format": null, "optionsRef": null, "required": true, "readOnly": true},
-            "commonNames": {"type": "string_array", "format": null, "optionsRef": null, "required": true, "readOnly": false},
-            "lifecycle": {"type": "enum_key", "format": "dictionary", "optionsRef": "lifecycle", "required": true, "readOnly": false},
-            "origin": {"type": "enum_key_array", "format": "dictionary", "optionsRef": "origin", "required": true, "readOnly": false},
-            "something": {"type": "enum_key", "format": "dynamic", "optionsRef": "/app-resources/somethings", "required": true, "readOnly": false},
-            "wikiLinks": {"type": "string", "format": "url", "optionsRef": null, "required": true, "readOnly": false},
-            "imageSource": {"type": "string", "format": "url", "optionsRef": null, "required": true, "readOnly": true},
-            "somethingNew": {"type": "string", "format": "url", "optionsRef": null, "required": true, "readOnly": true}
+            "status": {"type":  "enum_key", "format": "dictionary", "optionsRef": null, "unique": false, "required": true, "readOnly": false},
+            "species": {"type": "string", "format": null, "optionsRef": null, "unique": true, "required": true, "readOnly": true},
+            "genus": {"type": "string", "format": null, "optionsRef": null, "unique": false, "required": true, "readOnly": true},
+            "family": {"type": "string", "format": null, "optionsRef": null, "unique": false, "required": true, "readOnly": true},
+            "commonNames": {"type": "string_array", "format": null, "optionsRef": null, "unique": false, "required": true, "readOnly": false},
+            "lifecycle": {"type": "enum_key", "format": "dictionary", "optionsRef": "lifecycle", "unique": false, "required": true, "readOnly": false},
+            "origin": {"type": "enum_key_array", "format": "dictionary", "optionsRef": "origin", "unique": false, "required": true, "readOnly": false},
+            "something": {"type": "enum_key", "format": "dynamic", "optionsRef": "/app-resources/somethings", "unique": false, "required": true, "readOnly": false},
+            "wikiLinks": {"type": "string", "format": "url", "optionsRef": null, "unique": false, "required": true, "readOnly": false},
+            "imageSource": {"type": "string", "format": "url", "optionsRef": null, "unique": false, "required": true, "readOnly": true},
+            "somethingNew": {"type": "string", "format": "url", "optionsRef": null, "unique": false, "required": true, "readOnly": true}
           },
           "groupContents": {
             "potted plant": ["genus", "family", "commonNames", "lifecycle", "origin", "something", "wikiLinks", "imageSource", "somethingNew"],
