@@ -15,6 +15,7 @@ public record DataModel(
             Entry.Type type,
             Format format,
             String optionsRef,
+            boolean unique,
             boolean required,
             boolean readOnly
     ) {
