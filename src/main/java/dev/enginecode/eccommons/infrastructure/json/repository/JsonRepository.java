@@ -25,6 +25,23 @@ public interface JsonRepository<ID extends Serializable> {
 
     /**
      * Finds records of a specified type {@code R} from the database table associated with the given {@code clazz},
+     * where the specified virtual column is 'like' the provided searchPhrase ignoring case.
+     *
+     * <p>A "virtual column" in this context refers to a computed or derived column, rather than a physical column
+     * directly stored in the database. The method allows searching for records based on the computed values
+     * of such virtual columns.</p>
+     *
+     * @param columnName   The name of the virtual column to be matched.
+     * @param searchPhrase The search phrase to be matched within the specified virtual column.
+     * @param clazz        The class representing the type of records to be retrieved.
+     *                     It must be a subtype of {@link TableAnnotatedRecord}.
+     * @return A list of records where the specified virtual column matches the provided value
+     *         or an empty list if no records found for the given criteria.
+     */
+    <R extends TableAnnotatedRecord<ID>> List<R> findByVirtualColumnLikeIgnoreCase(String columnName, String searchPhrase, Class<R> clazz);
+
+    /**
+     * Finds records of a specified type {@code R} from the database table associated with the given {@code clazz},
      * where the specified virtual column matches the provided value.
      *
      * <p>A "virtual column" in this context refers to a computed or derived column, rather than a physical column

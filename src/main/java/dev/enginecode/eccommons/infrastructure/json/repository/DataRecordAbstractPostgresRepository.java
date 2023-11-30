@@ -70,6 +70,14 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
         );
     }
 
+    <R extends TableAnnotatedRecord<ID>> List<String> getDataRecordsByColumnLikeIgnoreCase(
+            String columnName, String searchPhrase, Class<R> clazz
+    ) {
+        String tableName = getTableName(clazz);
+        StringPath column = Expressions.stringPath(columnName);
+        return getDataRecordsWithCondition(column.likeIgnoreCase(searchPhrase), tableName);
+    }
+
     <R extends TableAnnotatedRecord<ID>> List<String> getDataRecordsByColumn(String columnName, String value, Class<R> clazz) {
         String tableName = getTableName(clazz);
         StringPath column = Expressions.stringPath(columnName);
