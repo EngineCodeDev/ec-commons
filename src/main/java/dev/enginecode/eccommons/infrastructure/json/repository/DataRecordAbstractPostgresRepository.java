@@ -50,7 +50,7 @@ public abstract class DataRecordAbstractPostgresRepository<ID extends Serializab
                         .fetchOne()
         ).orElseGet(() -> {
             logger.error(String.format(NOT_FOUND_FOR_ID_DETAILED, id.toString()));
-            throw new ResourceNotFoundException(INFRASTRUCTURE_ERROR, NOT_FOUND_FOR_ID);
+            throw new ResourceNotFoundException(INFRASTRUCTURE_ERROR, String.format(NOT_FOUND_FOR_ID_DETAILED, id));
         });
     }
 
