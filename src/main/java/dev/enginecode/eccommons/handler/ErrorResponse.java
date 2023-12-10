@@ -12,7 +12,7 @@ public record ErrorResponse(String code, String message, List<String> globalErro
     }
 
     public boolean hasFieldErrors() {
-        return !fieldErrors.isEmpty();
+        return fieldErrors != null && !fieldErrors.isEmpty();
     }
 
 
