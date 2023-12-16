@@ -1,6 +1,7 @@
-package dev.enginecode.eccommons.structures.validation;
+package dev.enginecode.eccommons.structures.validation.strategies;
 
 import dev.enginecode.eccommons.structures.model.DataModel;
+import dev.enginecode.eccommons.structures.validation.EntriesPayload;
 
 import java.util.List;
 

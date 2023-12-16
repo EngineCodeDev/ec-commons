@@ -1,6 +1,7 @@
 package dev.enginecode.eccommons.structures.validation;
 
 import dev.enginecode.eccommons.structures.model.DataModel;
+import dev.enginecode.eccommons.structures.validation.strategies.EntriesPayloadValidationStrategy;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;

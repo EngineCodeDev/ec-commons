@@ -1,14 +1,15 @@
-package dev.enginecode.eccommons.structures.validation
+package dev.enginecode.eccommons.structures.validation.strategies
 
 import dev.enginecode.eccommons.structures.model.DataModel
 import dev.enginecode.eccommons.structures.model.Entry
+import dev.enginecode.eccommons.structures.validation.EntriesPayload
 import spock.lang.Specification
 
 class TypeEntriesPayloadValidationStrategyTest extends Specification {
     private static final def dataModel = new DataModel(
             UUID.randomUUID(),
             Map.of("entry", new DataModel.EntrySettings(Entry.Type.ENUM, DataModel.EntrySettings.Format.DICTIONARY,
-                    "", false, false, false)
+                    "", false, false, false, false)
             ) as LinkedHashMap, Map.of() as LinkedHashMap,
             Map.of() as LinkedHashMap
     )

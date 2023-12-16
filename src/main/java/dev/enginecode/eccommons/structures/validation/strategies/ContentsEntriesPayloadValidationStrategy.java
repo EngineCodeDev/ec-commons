@@ -1,7 +1,8 @@
-package dev.enginecode.eccommons.structures.validation;
+package dev.enginecode.eccommons.structures.validation.strategies;
 
 import dev.enginecode.eccommons.structures.model.DataModel;
 import dev.enginecode.eccommons.structures.model.Entry;
+import dev.enginecode.eccommons.structures.validation.EntriesPayload;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
