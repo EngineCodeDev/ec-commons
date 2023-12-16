@@ -1,6 +1,6 @@
 package dev.enginecode.eccommons.structures.model;
 
-public class EnumEntry extends Entry<Entry<String>> {
+public final class EnumEntry extends Entry<Entry<String>> {
 
     public EnumEntry() {}
 

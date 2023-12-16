@@ -28,7 +28,7 @@ import static dev.enginecode.eccommons.exception.NotSupportedEntryException.WRON
         @JsonSubTypes.Type(value = StringArrayEntry.class, name = "enum_key_array"),
         @JsonSubTypes.Type(value = EnumArrayEntry.class, name = "enum_array")
 })
-public abstract class Entry<T> {
+public abstract sealed class Entry<T> permits EnumEntry, EnumArrayEntry, StringEntry, StringArrayEntry {
     private static final Logger logger = LogManager.getLogger(Entry.class);
     private String key;
     private T value;

@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     java
-    id("org.springframework.boot") version "3.1.5"
+    id("org.springframework.boot") version "3.2.0"
     id("io.spring.dependency-management") version "1.1.3"
     id("maven-publish")
     id("groovy")
@@ -12,10 +12,7 @@ group = "dev.enginecode"
 version = "0.0.3-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-}
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("--enable-preview")
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -24,8 +21,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.5")
-    implementation("org.springframework.boot:spring-boot-starter-web:3.1.5")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.0")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.2.0")
     implementation("org.postgresql:postgresql:42.6.0")
 
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
@@ -36,7 +33,7 @@ dependencies {
     annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.5")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.0")
     testImplementation("org.spockframework:spock-core:2.4-M1-groovy-4.0")
     testImplementation("org.spockframework:spock-spring:2.4-M1-groovy-4.0")
 }
