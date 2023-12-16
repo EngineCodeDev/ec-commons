@@ -15,6 +15,7 @@ public class ContentsEntriesPayloadValidationStrategy implements EntriesPayloadV
         Set<String> groupsContents = getGroupContentsByPayloadGroups(dataModel, payload.groups());
 
         LinkedHashSet<String> unexpectedContents = payload.entries().stream()
+                .filter(entry -> entry.getKey() != null && !entry.getKey().isBlank())
                 .map(Entry::getKey)
                 .filter(entryKey -> !groupsContents.contains(entryKey))
                 .collect(Collectors.toCollection(LinkedHashSet::new));

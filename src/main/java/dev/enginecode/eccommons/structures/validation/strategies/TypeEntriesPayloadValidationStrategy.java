@@ -14,6 +14,7 @@ public class TypeEntriesPayloadValidationStrategy implements EntriesPayloadValid
         List<ValidationError> validationErrors = new ArrayList<>();
 
         payload.entries().stream()
+                .filter(entry -> entry.getKey() != null)
                 .map(entry -> Map.entry(entry, Optional.ofNullable(dataModelEntrySettings.get(entry.getKey()))))
                 .filter(mapEntry -> mapEntry.getValue().isPresent())
                 .map(mapEntry -> Map.entry(mapEntry.getKey(), mapEntry.getValue().get().type()))
